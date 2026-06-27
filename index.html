@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shayan Dev — Digital Products & Experiences</title>
+    <meta name="description" content="Crafting high-performance mobile apps, web applications, and digital experiences.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    inter: ['Inter', 'sans-serif'],
+                    space: ['Space Grotesk', 'sans-serif'],
+                },
+            }
+        }
+    }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050505;
+            color: #FAFAFA;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::selection { background: rgba(255,107,44,0.3); color: #fff; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* Noise Overlay */
+        .noise-overlay {
+            position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.03;
+        }
+
+        /* Gradient Orbs */
+        .orb-1 {
+            position: fixed; top: -20%; right: -10%; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,107,44,0.08) 0%, transparent 70%);
+            border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0;
+        }
+        .orb-2 {
+            position: fixed; bottom: -20%; left: -10%; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(255,45,120,0.06) 0%, transparent 70%);
+            border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0;
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed; inset: 0; z-index: 99999; background: #050505;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .preloader.hidden { opacity: 0; visibility: hidden; }
+        .preloader-bar {
+            width: 120px; height: 2px; background: #1a1a1a; border-radius: 2px; overflow: hidden;
+        }
+        .preloader-bar::after {
+            content: ''; display: block; width: 40%; height: 100%; background: #FF6B2C;
+            border-radius: 2px; animation: preloaderSlide 0.8s ease infinite alternate;
+        }
+        @keyframes preloaderSlide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(200%); }
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #FF6B2C 0%, #FF2D78 50%, #FF6B2C 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 200% center; }
+        }
+
+        /* Marquee */
+        .marquee-track {
+            display: flex; width: max-content;
+            animation: marqueeScroll 30s linear infinite;
+        }
+        .marquee-track:hover { animation-play-state: paused; }
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+
+        /* Service Card Hover */
+        .service-card {
+            background: #0D0D0D; border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 20px; padding: 2.5rem; position: relative; overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+        }
+        .service-card::before {
+            content: ''; position: absolute; inset: 0; border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255,107,44,0.05) 0%, transparent 50%);
+            opacity: 0; transition: opacity 0.5s ease;
+        }
+        .service-card:hover { border-color: rgba(255,107,44,0.15); transform: translateY(-4px); }
+        .service-card:hover::before { opacity: 1; }
+
+        /* Project Card */
+        .project-card { position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; }
+        .project-card img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), filter 0.7s ease;
+        }
+        .project-card:hover img { transform: scale(1.08); filter: brightness(0.5); }
+        .project-card .project-info {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            justify-content: flex-end; padding: 2rem;
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+        }
+        .project-card:hover .project-info { opacity: 1; transform: translateY(0); }
+        .project-card .project-tag {
+            position: absolute; top: 1.25rem; left: 1.25rem;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+            padding: 0.35rem 0.85rem; border-radius: 100px; font-size: 0.7rem;
+            font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+            color: #FF6B2C; opacity: 0; transition: opacity 0.4s ease 0.1s;
+        }
+        .project-card:hover .project-tag { opacity: 1; }
+
+        /* Nav */
+        .nav-link {
+            position: relative; color: #71717A; font-size: 0.8rem; font-weight: 500;
+            letter-spacing: 0.02em; transition: color 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active { color: #FAFAFA; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+            background: #FF6B2C; transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+        /* CTA Button */
+        .btn-primary {
+            background: #FF6B2C; color: #fff; padding: 0.85rem 2rem;
+            border-radius: 100px; font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 0.02em; transition: all 0.3s ease; border: none; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-primary:hover { background: #E55A1B; transform: translateY(-2px); box-shadow: 0 10px 40px rgba(255,107,44,0.25); }
+
+        .btn-outline {
+            background: transparent; color: #FAFAFA; padding: 0.85rem 2rem;
+            border-radius: 100px; font-size: 0.8rem; font-weight: 500;
+            letter-spacing: 0.02em; transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.12); cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-outline:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.03); }
+
+        /* Tech pill */
+        .tech-pill {
+            background: #0D0D0D; border: 1px solid rgba(255,255,255,0.06);
+            padding: 0.6rem 1.2rem; border-radius: 100px; font-size: 0.78rem;
+            color: #A1A1AA; font-weight: 500; transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 0.4rem;
+        }
+        .tech-pill:hover { border-color: rgba(255,107,44,0.3); color: #FAFAFA; }
+
+        /* Stat counter */
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem; font-weight: 700; line-height: 1;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed; inset: 0; z-index: 999; background: #050505;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 2rem; opacity: 0; visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        .mobile-menu.open { opacity: 1; visibility: visible; }
+        .mobile-menu a {
+            font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 600;
+            color: #71717A; transition: color 0.3s ease;
+        }
+        .mobile-menu a:hover { color: #FAFAFA; }
+
+        /* Divider */
+        .section-divider {
+            width: 100%; height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent);
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto;
+            gap: 1rem;
+        }
+        .bento-large { grid-column: span 2; grid-row: span 2; }
+        .bento-wide { grid-column: span 2; }
+        .bento-tall { grid-row: span 2; }
+
+        @media (max-width: 1024px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .bento-large { grid-column: span 2; grid-row: span 1; }
+            .bento-tall { grid-row: span 1; }
+        }
+        @media (max-width: 640px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-large, .bento-wide { grid-column: span 1; }
+            .stat-number { font-size: 2.5rem; }
+        }
+
+        /* Hero line animation */
+        .hero-line {
+            width: 0; height: 1px; background: linear-gradient(to right, #FF6B2C, transparent);
+            animation: lineGrow 1.5s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
+        }
+        @keyframes lineGrow { to { width: 120px; } }
+
+        .hero-text-reveal {
+            opacity: 0; transform: translateY(30px);
+            animation: heroReveal 1s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
+        .hero-text-reveal-1 { animation-delay: 0.4s; }
+        .hero-text-reveal-2 { animation-delay: 0.6s; }
+        .hero-text-reveal-3 { animation-delay: 0.8s; }
+        .hero-text-reveal-4 { animation-delay: 1s; }
+        @keyframes heroReveal { to { opacity: 1; transform: translateY(0); } }
+
+        /* Floating badge */
+        .float-badge {
+            animation: floatBadge 3s ease-in-out infinite;
+        }
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+    <div class="preloader-bar"></div>
+</div>
+
+<!-- Noise Overlay -->
+<svg class="noise-overlay" xmlns="http://www.w3.org/2000/svg">
+    <filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter>
+    <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+</svg>
+
+<!-- Background Orbs -->
+<div class="orb-1"></div>
+<div class="orb-2"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#work" onclick="closeMobileMenu()">Work</a>
+    <a href="#expertise" onclick="closeMobileMenu()">Expertise</a>
+    <a href="#projects" onclick="closeMobileMenu()">Projects</a>
+    <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+    <div style="margin-top: 1rem;">
+        <a href="mailto:chshayan314@gmail.com" class="btn-primary" style="text-decoration:none;">Get in Touch</a>
+    </div>
+</div>
+
+<!-- Navigation -->
+<nav style="position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(5,5,5,0.7); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.04);">
+    <div style="max-width:1400px; margin:0 auto; padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between;">
+        <a href="#" style="text-decoration:none; display:flex; align-items:center; gap:0.5rem;">
+            <span style="font-family:'Space Grotesk',sans-serif; font-size:1.25rem; font-weight:700; color:#FAFAFA;">SHAYAN</span>
+            <span class="gradient-text" style="font-family:'Space Grotesk',sans-serif; font-size:1.25rem; font-weight:700;">.DEV</span>
+        </a>
+        <div style="display:flex; align-items:center; gap:2.5rem;" class="hidden md:flex">
+            <a href="#work" class="nav-link" style="text-decoration:none;">Work</a>
+            <a href="#expertise" class="nav-link" style="text-decoration:none;">Expertise</a>
+            <a href="#projects" class="nav-link" style="text-decoration:none;">Projects</a>
+            <a href="#contact" class="nav-link" style="text-decoration:none;">Contact</a>
+        </div>
+        <div style="display:flex; align-items:center; gap:1rem;">
+            <a href="mailto:chshayan314@gmail.com" class="btn-primary hidden sm:inline-flex" style="text-decoration:none; padding:0.6rem 1.5rem; font-size:0.75rem;">
+                Let's Talk
+                <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="14"></span>
+            </a>
+            <button onclick="toggleMobileMenu()" style="background:none; border:none; color:#FAFAFA; cursor:pointer; display:flex; flex-direction:column; gap:5px; padding:4px;" id="menuBtn" class="md:hidden">
+                <span style="width:22px; height:1.5px; background:#FAFAFA; transition:all 0.3s ease; display:block;" id="menuLine1"></span>
+                <span style="width:16px; height:1.5px; background:#FAFAFA; transition:all 0.3s ease; display:block;" id="menuLine2"></span>
+                <span style="width:22px; height:1.5px; background:#FAFAFA; transition:all 0.3s ease; display:block;" id="menuLine3"></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section style="min-height:100vh; display:flex; align-items:center; position:relative; z-index:1; padding:0 2rem;">
+    <div style="max-width:1400px; margin:0 auto; width:100%; padding-top:100px;">
+        <div class="hero-text-reveal hero-text-reveal-1" style="display:flex; align-items:center; gap:0.75rem; margin-bottom:2rem;">
+            <div style="width:8px; height:8px; background:#FF6B2C; border-radius:50%; animation: pulse 2s ease infinite;"></div>
+            <span style="font-size:0.75rem; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:#A1A1AA;">Available for Projects</span>
+        </div>
+        <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}</style>
+        
+        <h1 class="hero-text-reveal hero-text-reveal-2" style="font-family:'Space Grotesk',sans-serif; font-size:clamp(2.5rem, 7vw, 5.5rem); font-weight:700; line-height:1.05; max-width:900px; letter-spacing:-0.03em;">
+            Crafting Digital<br>
+            <span class="gradient-text">Products</span> That<br>
+            Drive Results
+        </h1>
+        
+        <div class="hero-line" style="margin:2.5rem 0;"></div>
+        
+        <p class="hero-text-reveal hero-text-reveal-3" style="font-size:1.05rem; color:#71717A; max-width:480px; line-height:1.7; font-weight:400;">
+            Transforming ideas into high-performance mobile applications, web platforms, and digital experiences using modern, trending technologies.
+        </p>
+        
+        <div class="hero-text-reveal hero-text-reveal-4" style="display:flex; flex-wrap:wrap; gap:1rem; margin-top:2.5rem; align-items:center;">
+            <a href="#projects" class="btn-primary" style="text-decoration:none;">
+                View Work
+                <span class="iconify" data-icon="solar:arrow-right-linear" data-width="16"></span>
+            </a>
+            <a href="#contact" class="btn-outline" style="text-decoration:none;">
+                Start a Project
+            </a>
+        </div>
+
+        <!-- Floating Stats -->
+        <div class="hero-text-reveal hero-text-reveal-4 float-badge" style="position:absolute; right:2rem; bottom:15%; background:#0D0D0D; border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:1.5rem 2rem; backdrop-filter:blur(12px); display:none; lg:block;" class="hidden lg:block">
+            <div style="font-family:'Space Grotesk',sans-serif; font-size:2.5rem; font-weight:700; color:#FF6B2C;" class="counter" data-target="4">0</div>
+            <div style="font-size:0.75rem; color:#71717A; font-weight:500; letter-spacing:0.05em; text-transform:uppercase;">Years of Craft</div>
+        </div>
+    </div>
+</section>
+
+<!-- Marquee -->
+<div style="position:relative; z-index:1; border-top:1px solid rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.04); padding:1.25rem 0; overflow:hidden;">
+    <div class="marquee-track">
+        <span style="display:flex; align-items:center; gap:3rem; padding-right:3rem; font-family:'Space Grotesk',sans-serif; font-size:0.85rem; font-weight:500; color:#333; text-transform:uppercase; letter-spacing:0.1em; white-space:nowrap;">
+            <span>FLUTTER</span><span style="color:#FF6B2C;">✦</span>
+            <span>DART</span><span style="color:#FF6B2C;">✦</span>
+            <span>REACT</span><span style="color:#FF6B2C;">✦</span>
+            <span>NEXT.JS</span><span style="color:#FF6B2C;">✦</span>
+            <span>FIREBASE</span><span style="color:#FF6B2C;">✦</span>
+            <span>NODE.JS</span><span style="color:#FF6B2C;">✦</span>
+            <span>MONGODB</span><span style="color:#FF6B2C;">✦</span>
+            <span>TYPESCRIPT</span><span style="color:#FF6B2C;">✦</span>
+            <span>TAILWIND CSS</span><span style="color:#FF6B2C;">✦</span>
+            <span>FIGMA</span><span style="color:#FF6B2C;">✦</span>
+            <span>UI/UX DESIGN</span><span style="color:#FF6B2C;">✦</span>
+            <span>FULL STACK</span><span style="color:#FF6B2C;">✦</span>
+        </span>
+        <span style="display:flex; align-items:center; gap:3rem; padding-right:3rem; font-family:'Space Grotesk',sans-serif; font-size:0.85rem; font-weight:500; color:#333; text-transform:uppercase; letter-spacing:0.1em; white-space:nowrap;">
+            <span>FLUTTER</span><span style="color:#FF6B2C;">✦</span>
+            <span>DART</span><span style="color:#FF6B2C;">✦</span>
+            <span>REACT</span><span style="color:#FF6B2C;">✦</span>
+            <span>NEXT.JS</span><span style="color:#FF6B2C;">✦</span>
+            <span>FIREBASE</span><span style="color:#FF6B2C;">✦</span>
+            <span>NODE.JS</span><span style="color:#FF6B2C;">✦</span>
+            <span>MONGODB</span><span style="color:#FF6B2C;">✦</span>
+            <span>TYPESCRIPT</span><span style="color:#FF6B2C;">✦</span>
+            <span>TAILWIND CSS</span><span style="color:#FF6B2C;">✦</span>
+            <span>FIGMA</span><span style="color:#FF6B2C;">✦</span>
+            <span>UI/UX DESIGN</span><span style="color:#FF6B2C;">✦</span>
+            <span>FULL STACK</span><span style="color:#FF6B2C;">✦</span>
+        </span>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<section id="work" style="position:relative; z-index:1; padding:6rem 2rem;">
+    <div style="max-width:1400px; margin:0 auto;">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:2rem;" class="grid grid-cols-2 lg:grid-cols-4">
+            <div class="reveal" style="text-align:center;">
+                <div class="stat-number gradient-text counter" data-target="4">0</div>
+                <div style="font-size:0.78rem; color:#71717A; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; margin-top:0.75rem;">Years Experience</div>
+            </div>
+            <div class="reveal reveal-delay-1" style="text-align:center;">
+                <div class="stat-number gradient-text"><span class="counter" data-target="50">0</span>+</div>
+                <div style="font-size:0.78rem; color:#71717A; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; margin-top:0.75rem;">Projects Delivered</div>
+            </div>
+            <div class="reveal reveal-delay-2" style="text-align:center;">
+                <div class="stat-number gradient-text"><span class="counter" data-target="30">0</span>+</div>
+                <div style="font-size:0.78rem; color:#71717A; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; margin-top:0.75rem;">Happy Clients</div>
+            </div>
+            <div class="reveal reveal-delay-3" style="text-align:center;">
+                <div class="stat-number gradient-text"><span class="counter" data-target="99">0</span>%</div>
+                <div style="font-size:0.78rem; color:#71717A; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; margin-top:0.75rem;">Client Satisfaction</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider" style="position:relative; z-index:1;"></div>
+
+<!-- Expertise / Services -->
+<section id="expertise" style="position:relative; z-index:1; padding:6rem 2rem;">
+    <div style="max-width:1400px; margin:0 auto;">
+        <div class="reveal" style="margin-bottom:4rem;">
+            <span style="font-size:0.7rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:#FF6B2C;">What We Do</span>
+            <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,4vw,3.5rem); font-weight:700; letter-spacing:-0.02em; margin-top:1rem; line-height:1.15;">
+                Expertise Built for<br>Modern Demands
+            </h2>
+        </div>
+
+        <div class="bento-grid">
+            <!-- Large Card -->
+            <div class="bento-large service-card reveal" style="display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                    <div style="width:48px; height:48px; border-radius:14px; background:rgba(255,107,44,0.1); display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem;">
+                        <span class="iconify" data-icon="solar:smartphone-2-bold-duotone" data-width="24" style="color:#FF6B2C;"></span>
+                    </div>
+                    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.5rem; font-weight:600; margin-bottom:1rem;">Mobile App Development</h3>
+                    <p style="color:#71717A; font-size:0.9rem; line-height:1.7; max-width:400px;">
+                        High-performance, cross-platform mobile applications built with Flutter — delivering native-like experiences on both iOS and Android from a single codebase.
+                    </p>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:2rem;">
+                    <span style="font-size:0.7rem; padding:0.3rem 0.7rem; border-radius:100px; background:rgba(255,255,255,0.04); color:#A1A1AA;">Flutter</span>
+                    <span style="font-size:0.7rem; padding:0.3rem 0.7rem; border-radius:100px; background:rgba(255,255,255,0.04); color:#A1A1AA;">Dart</span>
+                    <span style="font-size:0.7rem; padding:0.3rem 0.7rem; border-radius:100px; background:rgba(255,255,255,0.04); color:#A1A1AA;">Firebase</span>
+                    <span style="font-size:0.7rem; padding:0.3rem 0.7rem; border-radius:100px; background:rgba(255,255,255,0.04); color:#A1A1AA;">REST APIs</span>
+                </div>
+            </div>
+
+            <!-- Wide Card -->
+            <div class="bento-wide service-card reveal reveal-delay-1">
+                <div style="width:48px; height:48px; border-radius:14px; background:rgba(255,45,120,0.1); display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem;">
+                    <span class="iconify" data-icon="solar:monitor-bold-duotone" data-width="24" style="color:#FF2D78;"></span>
+                </div>
+                <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.3rem; font-weight:600; margin-bottom:0.75rem;">Web App Development</h3>
+                <p style="color:#71717A; font-size:0.85rem; line-height:1.7;">
+                    Scalable, responsive web applications using React, Next.js, and modern frameworks — built for speed and user engagement.
+                </p>
+            </div>
+
+            <!-- Small Card -->
+            <div class="service-card reveal reveal-delay-2">
+                <div style="width:48px; height:48px; border-radius:14px; background:rgba(99,102,241,0.1); display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem;">
+                    <span class="iconify" data-icon="solar:code-square-bold-duotone" data-width="24" style="color:#6366F1;"></span>
+                </div>
+                <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.3rem; font-weight:600; margin-bottom:0.75rem;">Full Stack Solutions</h3>
+                <p style="color:#71717A; font-size:0.85rem; line-height:1.7;">
+                    End-to-end development — from database design to deployment and everything between.
+                </p>
+            </div>
+
+            <!-- Small Card -->
+            <div class="service-card reveal reveal-delay-3">
+                <div style="width:48px; height:48px; border-radius:14px; background:rgba(16,185,129,0.1); display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem;">
+                    <span class="iconify" data-icon="solar:pallete-2-bold-duotone" data-width="24" style="color:#10B981;"></span>
+                </div>
+                <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.3rem; font-weight:600; margin-bottom:0.75rem;">UI/UX Design</h3>
+                <p style="color:#71717A; font-size:0.85rem; line-height:1.7;">
+                    Clean, modern interfaces designed in Figma with focus on conversion and usability.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider" style="position:relative; z-index:1;"></div>
+
+<!-- Projects Section -->
+<section id="projects" style="position:relative; z-index:1; padding:6rem 2rem;">
+    <div style="max-width:1400px; margin:0 auto;">
+        <div class="reveal" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; margin-bottom:4rem; gap:1rem;">
+            <div>
+                <span style="font-size:0.7rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:#FF6B2C;">Selected Work</span>
+                <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,4vw,3.5rem); font-weight:700; letter-spacing:-0.02em; margin-top:1rem; line-height:1.15;">
+                    Projects That<br>Speak Volumes
+                </h2>
+            </div>
+            <a href="https://github.com/shayan314" target="_blank" class="btn-outline" style="text-decoration:none; font-size:0.75rem; padding:0.6rem 1.5rem;">
+                View All on GitHub
+                <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="14"></span>
+            </a>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem;" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            
+            <!-- Project 1 -->
+            <a href="#" target="_blank" class="project-card reveal" style="aspect-ratio:4/3; text-decoration:none; color:inherit; display:block;">
+                <img src="https://picsum.photos/seed/luxecart/800/600" alt="LuxeCart" loading="lazy">
+                <span class="project-tag">Mobile App</span>
+                <div class="project-info">
+                    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; font-weight:600;">LuxeCart</h3>
+                    <p style="color:#A1A1AA; font-size:0.82rem; margin-top:0.5rem; line-height:1.5;">Premium e-commerce application with seamless checkout, real-time tracking, and personalized recommendations.</p>
+                    <div style="display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap;">
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Flutter</span>
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Firebase</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project 2 -->
+            <a href="#" target="_blank" class="project-card reveal reveal-delay-1" style="aspect-ratio:4/3; text-decoration:none; color:inherit; display:block;">
+                <img src="https://picsum.photos/seed/fitpulse/800/600" alt="FitPulse" loading="lazy">
+                <span class="project-tag">Mobile App</span>
+                <div class="project-info">
+                    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; font-weight:600;">FitPulse</h3>
+                    <p style="color:#A1A1AA; font-size:0.82rem; margin-top:0.5rem; line-height:1.5;">AI-powered fitness tracking app with workout plans, nutrition logging, and progress analytics.</p>
+                    <div style="display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap;">
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Flutter</span>
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Dart</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project 3 -->
+            <a href="#" target="_blank" class="project-card reveal reveal-delay-2" style="aspect-ratio:4/3; text-decoration:none; color:inherit; display:block;">
+                <img src="https://picsum.photos/seed/clouddash22/800/600" alt="CloudDash" loading="lazy">
+                <span class="project-tag">Web App</span>
+                <div class="project-info">
+                    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; font-weight:600;">CloudDash</h3>
+                    <p style="color:#A1A1AA; font-size:0.82rem; margin-top:0.5rem; line-height:1.5;">SaaS analytics dashboard with real-time data visualization, team management, and automated reporting.</p>
+                    <div style="display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap;">
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">React</span>
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Node.js</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project 4 -->
+            <a href="#" target="_blank" class="project-card reveal" style="aspect-ratio:4/3; text-decoration:none; color:inherit; display:block;">
+                <img src="https://picsum.photos/seed/estatepro/800/600" alt="EstatePro" loading="lazy">
+                <span class="project-tag">Full Stack</span>
+                <div class="project-info">
+                    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; font-weight:600;">EstatePro</h3>
+                    <p style="color:#A1A1AA; font-size:0.82rem; margin-top:0.5rem; line-height:1.5;">Real estate platform with property listings, virtual tours, map integration, and lead management system.</p>
+                    <div style="display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap;">
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Next.js</span>
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">MongoDB</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project 5 -->
+            <a href="#" target="_blank" class="project-card reveal reveal-delay-1" style="aspect-ratio:4/3; text-decoration:none; color:inherit; display:block;">
+                <img src="https://picsum.photos/seed/quickbite/800/600" alt="QuickBite" loading="lazy">
+                <span class="project-tag">Mobile + Web</span>
+                <div class="project-info">
+                    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; font-weight:600;">QuickBite</h3>
+                    <p style="color:#A1A1AA; font-size:0.82rem; margin-top:0.5rem; line-height:1.5;">Food delivery platform with real-time order tracking, restaurant management, and payment integration.</p>
+                    <div style="display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap;">
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Flutter</span>
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Firebase</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Project 6 -->
+            <a href="#" target="_blank" class="project-card reveal reveal-delay-2" style="aspect-ratio:4/3; text-decoration:none; color:inherit; display:block;">
+                <img src="https://picsum.photos/seed/novabrand/800/600" alt="NovaBrand" loading="lazy">
+                <span class="project-tag">Website</span>
+                <div class="project-info">
+                    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; font-weight:600;">NovaBrand</h3>
+                    <p style="color:#A1A1AA; font-size:0.82rem; margin-top:0.5rem; line-height:1.5;">High-converting business website with smooth animations, CMS integration, and SEO optimization.</p>
+                    <div style="display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap;">
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Next.js</span>
+                        <span style="font-size:0.65rem; padding:0.25rem 0.6rem; border-radius:100px; background:rgba(255,255,255,0.1); color:#ccc;">Tailwind</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider" style="position:relative; z-index:1;"></div>
+
+<!-- Tech Stack -->
+<section style="position:relative; z-index:1; padding:6rem 2rem;">
+    <div style="max-width:1400px; margin:0 auto;">
+        <div class="reveal" style="text-align:center; margin-bottom:3.5rem;">
+            <span style="font-size:0.7rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:#FF6B2C;">Tech Stack</span>
+            <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(1.5rem,3vw,2.5rem); font-weight:700; letter-spacing:-0.02em; margin-top:1rem;">
+                Tools & Technologies
+            </h2>
+        </div>
+        <div class="reveal reveal-delay-1" style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.75rem;">
+            <span class="tech-pill"><span class="iconify" data-icon="logos:flutter" data-width="16"></span> Flutter</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:dart" data-width="16"></span> Dart</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:react" data-width="16"></span> React</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:nextjs-icon" data-width="16"></span> Next.js</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:nodejs-icon" data-width="16"></span> Node.js</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:mongodb-icon" data-width="16"></span> MongoDB</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:firebase" data-width="16"></span> Firebase</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:typescript-icon" data-width="16"></span> TypeScript</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:tailwindcss-icon" data-width="16"></span> Tailwind CSS</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:figma" data-width="10"></span> Figma</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:git-icon" data-width="16"></span> Git</span>
+            <span class="tech-pill"><span class="iconify" data-icon="logos:github-icon" data-width="16"></span> GitHub</span>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider" style="position:relative; z-index:1;"></div>
+
+<!-- Contact CTA -->
+<section id="contact" style="position:relative; z-index:1; padding:8rem 2rem;">
+    <div style="max-width:900px; margin:0 auto; text-align:center;">
+        <div class="reveal">
+            <span style="font-size:0.7rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:#FF6B2C;">Get in Touch</span>
+            <h2 style="font-family:'Space Grotesk',sans-serif; font-size:clamp(2.5rem,5vw,4rem); font-weight:700; letter-spacing:-0.03em; margin-top:1.25rem; line-height:1.1;">
+                Have a Project<br>in Mind?
+            </h2>
+            <p style="color:#71717A; font-size:1.05rem; line-height:1.7; max-width:500px; margin:1.75rem auto 0;">
+                Let's turn your vision into reality. Reach out and let's discuss how we can build something exceptional together.
+            </p>
+        </div>
+
+        <div class="reveal reveal-delay-1" style="display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:3rem;">
+            <a href="mailto:chshayan314@gmail.com" class="btn-primary" style="text-decoration:none;">
+                <span class="iconify" data-icon="solar:letter-bold" data-width="16"></span>
+                Send an Email
+            </a>
+            <a href="https://wa.me/923296427396" target="_blank" class="btn-outline" style="text-decoration:none;">
+                <span class="iconify" data-icon="logos:whatsapp-icon" data-width="16"></span>
+                WhatsApp
+            </a>
+        </div>
+
+        <!-- Contact Cards -->
+        <div class="reveal reveal-delay-2" style="display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:4rem;" class="grid grid-cols-1 sm:grid-cols-3">
+            <div style="background:#0D0D0D; border:1px solid rgba(255,255,255,0.04); border-radius:16px; padding:2rem; text-align:center;">
+                <span class="iconify" data-icon="solar:letter-bold-duotone" data-width="28" style="color:#FF6B2C;"></span>
+                <div style="font-size:0.7rem; color:#71717A; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; margin-top:1rem;">Email</div>
+                <a href="mailto:chshayan314@gmail.com" style="font-size:0.85rem; color:#FAFAFA; text-decoration:none; margin-top:0.35rem; display:block; word-break:break-all;">chshayan314@gmail.com</a>
+            </div>
+            <div style="background:#0D0D0D; border:1px solid rgba(255,255,255,0.04); border-radius:16px; padding:2rem; text-align:center;">
+                <span class="iconify" data-icon="solar:phone-calling-bold-duotone" data-width="28" style="color:#10B981;"></span>
+                <div style="font-size:0.7rem; color:#71717A; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; margin-top:1rem;">WhatsApp</div>
+                <a href="https://wa.me/923296427396" target="_blank" style="font-size:0.85rem; color:#FAFAFA; text-decoration:none; margin-top:0.35rem; display:block;">+92 329 6427396</a>
+            </div>
+            <div style="background:#0D0D0D; border:1px solid rgba(255,255,255,0.04); border-radius:16px; padding:2rem; text-align:center;">
+                <span class="iconify" data-icon="solar:code-bold-duotone" data-width="28" style="color:#6366F1;"></span>
+                <div style="font-size:0.7rem; color:#71717A; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; margin-top:1rem;">GitHub</div>
+                <a href="https://github.com/shayan314" target="_blank" style="font-size:0.85rem; color:#FAFAFA; text-decoration:none; margin-top:0.35rem; display:block;">@shayan314</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer style="position:relative; z-index:1; border-top:1px solid rgba(255,255,255,0.04); padding:2.5rem 2rem;">
+    <div style="max-width:1400px; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem;">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span style="font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:700; color:#FAFAFA;">SHAYAN</span>
+            <span class="gradient-text" style="font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:700;">.DEV</span>
+        </div>
+        <p style="font-size:0.75rem; color:#52525B;">© 2025 Shayan Dev. All rights reserved.</p>
+        <div style="display:flex; gap:1rem;">
+            <a href="https://github.com/shayan314" target="_blank" style="color:#52525B; transition:color 0.3s ease;" onmouseover="this.style.color='#FAFAFA'" onmouseout="this.style.color='#52525B'">
+                <span class="iconify" data-icon="mdi:github" data-width="20"></span>
+            </a>
+            <a href="mailto:chshayan314@gmail.com" style="color:#52525B; transition:color 0.3s ease;" onmouseover="this.style.color='#FAFAFA'" onmouseout="this.style.color='#52525B'">
+                <span class="iconify" data-icon="solar:letter-linear" data-width="20"></span>
+            </a>
+            <a href="https://wa.me/923296427396" target="_blank" style="color:#52525B; transition:color 0.3s ease;" onmouseover="this.style.color='#FAFAFA'" onmouseout="this.style.color='#52525B'">
+                <span class="iconify" data-icon="mdi:whatsapp" data-width="20"></span>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script>
+// Preloader
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('preloader').classList.add('hidden');
+    }, 800);
+});
+
+// Mobile Menu
+let menuOpen = false;
+function toggleMobileMenu() {
+    menuOpen = !menuOpen;
+    document.getElementById('mobileMenu').classList.toggle('open', menuOpen);
+    const l1 = document.getElementById('menuLine1');
+    const l2 = document.getElementById('menuLine2');
+    const l3 = document.getElementById('menuLine3');
+    if (menuOpen) {
+        l1.style.transform = 'rotate(45deg) translate(4px, 4px)';
+        l2.style.opacity = '0';
+        l3.style.transform = 'rotate(-45deg) translate(4px, -4px)';
+        document.body.style.overflow = 'hidden';
+    } else {
+        l1.style.transform = 'none';
+        l2.style.opacity = '1';
+        l3.style.transform = 'none';
+        document.body.style.overflow = '';
+    }
+}
+function closeMobileMenu() {
+    if (menuOpen) toggleMobileMenu();
+}
+
+// Scroll Reveal
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+revealElements.forEach(el => revealObserver.observe(el));
+
+// Counter Animation
+const counters = document.querySelectorAll('.counter');
+const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.getAttribute('data-target'));
+            const duration = 2000;
+            const start = performance.now();
+            
+            function update(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.floor(eased * target);
+                if (progress < 1) requestAnimationFrame(update);
+                else el.textContent = target;
+            }
+            requestAnimationFrame(update);
+            counterObserver.unobserve(el);
+        }
+    });
+}, { threshold: 0.5 });
+counters.forEach(c => counterObserver.observe(c));
+
+// Active Nav Link on Scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+        const top = section.offsetTop - 200;
+        if (scrollY >= top) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+});
+
+// Navbar background on scroll
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+        nav.style.background = 'rgba(5,5,5,0.9)';
+    } else {
+        nav.style.background = 'rgba(5,5,5,0.7)';
+    }
+});
+</script>
+
+</body>
+</html>
