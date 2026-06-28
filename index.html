@@ -81,14 +81,23 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 .tt .is,.tt .im{position:absolute;transition:all .3s}
 .tt .is{opacity:0;transform:scale(.5) rotate(-90deg)}.tt .im{opacity:1;transform:scale(1)}
 .lm .tt .is{opacity:1;transform:scale(1)}.lm .tt .im{opacity:0;transform:scale(.5) rotate(90deg)}
-.mbg{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:all .3s}
+
+/* ===== MODAL — PROPERLY RESPONSIVE ===== */
+.mbg{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:.75rem;opacity:0;visibility:hidden;transition:all .3s}
 .mbg.open{opacity:1;visibility:visible}
-.mbx{background:var(--bc);border:1px solid var(--br);border-radius:24px;padding:1.5rem;max-width:480px;width:100%;transform:translateY(20px) scale(.95);transition:all .4s cubic-bezier(.16,1,.3,1);max-height:90vh;overflow-y:auto}
+.mbx{background:var(--bc);border:1px solid var(--br);border-radius:24px;padding:1.5rem;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;transform:translateY(20px) scale(.95);transition:all .4s cubic-bezier(.16,1,.3,1)}
 .mbg.open .mbx{transform:translateY(0) scale(1)}
-@media(max-width:480px){.mbx{padding:1.25rem;border-radius:20px;margin:.5rem}}
-.mi{width:100%;padding:.8rem 1rem;border-radius:12px;border:1px solid var(--br);background:var(--in);color:var(--t);font-size:.85rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .3s;box-sizing:border-box}
-.mi:focus{border-color:#FF6B2C}.mi::placeholder{color:var(--tm)}
-.mi[aria-invalid="true"]{border-color:#EF4444}
+@media(min-width:480px){.mbx{padding:2rem;border-radius:24px}}
+
+/* Form inputs — responsive */
+.fi{width:100%;padding:.75rem 1rem;border-radius:12px;border:1px solid var(--br);background:var(--in);color:var(--t);font-size:.88rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .3s;display:block}
+.fi:focus{border-color:#FF6B2C}
+.fi::placeholder{color:var(--tm)}
+.fi.err{border-color:#EF4444}
+.fg{margin-bottom:.65rem}
+.fe{color:#EF4444;font-size:.75rem;display:none;margin-top:.2rem}
+.fe.show{display:block}
+
 .rc{background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;transition:all .4s;flex-shrink:0;scroll-snap-align:start}
 .rc:hover{border-color:var(--bh);transform:translateY(-3px)}
 .rs{color:#FBBF24;font-size:.8rem;letter-spacing:2px}
@@ -103,17 +112,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 @keyframes hra{to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 @keyframes fb{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 .dn{display:flex;align-items:center;gap:2rem}
 .db{display:inline-flex}
 .hb{display:none}
 @media(max-width:768px){.dn{display:none!important}.db{display:none!important}.hb{display:flex!important}}
 .logo{display:flex;align-items:center;gap:.3rem;white-space:nowrap;text-decoration:none;flex-shrink:0}
 .av{width:7px;height:7px;background:#FF6B2C;border-radius:50%;animation:pulse 2s ease infinite;flex-shrink:0}
-[data-fs-error]{color:#EF4444;font-size:.75rem;margin-top:-.25rem;min-height:0}
-[data-fs-error]:empty{display:none}
-.fs-ok{display:none;text-align:center;padding:2rem .5rem}
-.fs-ok.show{display:block}
-.fs-form.hide{display:none}
 </style>
 </head>
 <body>
@@ -135,57 +140,43 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </div>
 
-<!-- CONTACT MODAL — FORMSPREE AJAX -->
+<!-- ===== CONTACT MODAL — SIMPLE & RESPONSIVE ===== -->
 <div class="mbg" id="cMod" onclick="if(event.target===this)xm()">
 <div class="mbx">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
-<div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">Let's Talk</h3><p style="font-size:.78rem;color:var(--ts);margin-top:.2rem">Share your project details</p></div>
-<button onclick="xm()" style="background:var(--in);border:1px solid var(--br);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ts);flex-shrink:0"><span class="iconify" data-icon="solar:close-circle-linear" data-width="20"></span></button>
+
+<!-- Header -->
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;gap:.75rem">
+<div style="min-width:0"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600">Let's Talk</h3><p style="font-size:.78rem;color:var(--ts);margin-top:.15rem">Share your project details</p></div>
+<button onclick="xm()" style="background:var(--in);border:1px solid var(--br);width:34px;height:34px;min-width:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ts)"><span class="iconify" data-icon="solar:close-circle-linear" data-width="18"></span></button>
 </div>
 
-<!-- SUCCESS MESSAGE (Formspree shows this) -->
-<div class="fs-ok" id="fsOk">
-<div style="width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><span class="iconify" data-icon="solar:check-circle-bold" data-width="28" style="color:#10B981"></span></div>
-<h4 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600">Message Sent!</h4>
-<p style="font-size:.82rem;color:var(--ts);margin-top:.5rem;line-height:1.6">Thanks for reaching out! I'll get back to you within 24 hours.</p>
-<button onclick="xm()" class="bo" style="margin-top:1.5rem;padding:.65rem 1.5rem">Close</button>
-</div>
-
-<!-- ERROR MESSAGE (Formspree shows this) -->
-<div data-fs-error style="color:#EF4444;font-size:.85rem;text-align:center;padding:1rem .5rem;display:none"></div>
-
-<!-- FORM — Formspree Ajax Integration -->
-<div class="fs-form" id="fsForm">
-<form id="my-form" style="display:flex;flex-direction:column;gap:.7rem">
+<!-- FORM VIEW -->
+<div id="formView">
+<form id="cF">
 <input type="hidden" name="_subject" value="New Project Inquiry — Shayan Dev Portfolio">
-<div>
-<input type="text" name="name" class="mi" placeholder="Your Name" required data-fs-field>
-<span data-fs-error="name"></span>
-</div>
-<div>
-<input type="email" name="email" class="mi" placeholder="Your Email" required data-fs-field>
-<span data-fs-error="email"></span>
-</div>
-<div>
-<input type="text" name="project_type" class="mi" placeholder="Project Type (App / Website / Both)" data-fs-field>
-<span data-fs-error="project_type"></span>
-</div>
-<div>
-<input type="text" name="budget" class="mi" placeholder="Budget Range (Optional)" data-fs-field>
-<span data-fs-error="budget"></span>
-</div>
-<div>
-<textarea name="message" class="mi" placeholder="Tell me about your project..." rows="4" style="resize:none" required data-fs-field></textarea>
-<span data-fs-error="message"></span>
-</div>
-<button type="submit" class="bp" style="width:100%;justify-content:center;padding:.9rem;margin-top:.25rem" data-fs-submit-btn><span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message</button>
+<div class="fg"><input type="text" name="name" class="fi" placeholder="Your Name *" required><div class="fe" id="eName"></div></div>
+<div class="fg"><input type="email" name="email" class="fi" placeholder="Your Email *" required><div class="fe" id="eEmail"></div></div>
+<div class="fg"><input type="text" name="project_type" class="fi" placeholder="Project Type (App / Website / Both)"><div class="fe" id="eType"></div></div>
+<div class="fg"><input type="text" name="budget" class="fi" placeholder="Budget Range (Optional)"></div>
+<div class="fg"><textarea name="message" class="fi" placeholder="Tell me about your project..." rows="4" style="resize:none" required></textarea><div class="fe" id="eMsg"></div></div>
+<div id="fErr" style="color:#EF4444;font-size:.8rem;display:none;margin-bottom:.5rem"></div>
+<button type="submit" class="bp" id="sB" style="width:100%;justify-content:center;padding:.85rem;font-size:.82rem"><span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message</button>
 </form>
 </div>
 
-<div style="display:flex;align-items:center;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--br);flex-wrap:wrap">
-<span style="font-size:.7rem;color:var(--tm)">Or reach directly:</span>
-<a href="https://wa.me/923296427396" target="_blank" style="font-size:.75rem;color:#25D366;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.3rem"><span class="iconify" data-icon="mdi:whatsapp" data-width="14"></span> WhatsApp</a>
-<a href="mailto:chshayan314@gmail.com" style="font-size:.75rem;color:#FF6B2C;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.3rem"><span class="iconify" data-icon="solar:letter-linear" data-width="14"></span> Email</a>
+<!-- SUCCESS VIEW -->
+<div id="okView" style="display:none;text-align:center;padding:1.5rem 0">
+<div style="width:52px;height:52px;border-radius:50%;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><span class="iconify" data-icon="solar:check-circle-bold" data-width="26" style="color:#10B981"></span></div>
+<h4 style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600">Message Sent!</h4>
+<p style="font-size:.82rem;color:var(--ts);margin-top:.5rem;line-height:1.6">Thanks for reaching out!<br>I'll get back to you within 24 hours.</p>
+<button onclick="xm()" class="bo" style="margin-top:1.25rem;padding:.6rem 1.5rem;font-size:.8rem">Close</button>
+</div>
+
+<!-- Bottom links -->
+<div style="display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--br);flex-wrap:wrap">
+<span style="font-size:.68rem;color:var(--tm);white-space:nowrap">Or directly:</span>
+<a href="https://wa.me/923296427396" target="_blank" style="font-size:.73rem;color:#25D366;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.25rem"><span class="iconify" data-icon="mdi:whatsapp" data-width="13"></span> WhatsApp</a>
+<a href="mailto:chshayan314@gmail.com" style="font-size:.73rem;color:#FF6B2C;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.25rem"><span class="iconify" data-icon="solar:letter-linear" data-width="13"></span> Email</a>
 </div>
 </div>
 </div>
@@ -225,7 +216,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </section>
 
-<!-- MARQUEE -->
 <div style="position:relative;z-index:1;border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:1rem 0;overflow:hidden">
 <div class="mt">
 <span style="display:flex;align-items:center;gap:2.5rem;padding-right:2.5rem;font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:500;color:var(--mc);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap">FLUTTER<span style="color:#FF6B2C">✦</span>DART<span style="color:#FF6B2C">✦</span>REACT<span style="color:#FF6B2C">✦</span>NEXT.JS<span style="color:#FF6B2C">✦</span>FIREBASE<span style="color:#FF6B2C">✦</span>NODE.JS<span style="color:#FF6B2C">✦</span>MONGODB<span style="color:#FF6B2C">✦</span>TYPESCRIPT<span style="color:#FF6B2C">✦</span>TAILWIND<span style="color:#FF6B2C">✦</span>FIGMA<span style="color:#FF6B2C">✦</span>FULL STACK<span style="color:#FF6B2C">✦</span></span>
@@ -233,7 +223,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </div>
 
-<!-- STATS -->
 <section id="work" style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto" class="gs">
 <div class="rv" style="text-align:center;padding:1.25rem 0"><div class="sn gt" style="font-size:clamp(2rem,5vw,3.5rem)"><span class="ctr" data-target="4">0</span></div><div style="font-size:.7rem;color:var(--ts);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-top:.6rem">Years Experience</div></div>
@@ -244,15 +233,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
-<!-- EXPERTISE -->
 <section id="expertise" style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto">
 <div class="rv" style="margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">What We Do</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">Expertise Built for<br>Modern Demands</h2></div>
 <div class="gb">
-<div class="bl sc rv" style="display:flex;flex-direction:column;justify-content:space-between">
-<div><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,107,44,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:smartphone-2-bold-duotone" data-width="22" style="color:#FF6B2C"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:600;margin-bottom:.75rem">Mobile App Development</h3><p style="color:var(--ts);font-size:.85rem;line-height:1.7;max-width:380px">High-performance, cross-platform mobile apps built with Flutter — native-like experiences on iOS & Android from a single codebase.</p></div>
-<div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.75rem"><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Flutter</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Dart</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Firebase</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">REST APIs</span></div>
-</div>
+<div class="bl sc rv" style="display:flex;flex-direction:column;justify-content:space-between"><div><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,107,44,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:smartphone-2-bold-duotone" data-width="22" style="color:#FF6B2C"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:600;margin-bottom:.75rem">Mobile App Development</h3><p style="color:var(--ts);font-size:.85rem;line-height:1.7;max-width:380px">High-performance, cross-platform mobile apps built with Flutter — native-like experiences on iOS & Android from a single codebase.</p></div><div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.75rem"><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Flutter</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Dart</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Firebase</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">REST APIs</span></div></div>
 <div class="bw sc rv d1"><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,45,120,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:monitor-bold-duotone" data-width="22" style="color:#FF2D78"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:.6rem">Web App Development</h3><p style="color:var(--ts);font-size:.82rem;line-height:1.7">Scalable, responsive web apps using React & Next.js — built for speed and engagement.</p></div>
 <div class="sc rv d2"><div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:code-square-bold-duotone" data-width="22" style="color:#6366F1"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:.6rem">Full Stack</h3><p style="color:var(--ts);font-size:.82rem;line-height:1.7">End-to-end — from database design to deployment.</p></div>
 <div class="sc rv d3"><div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:pallete-2-bold-duotone" data-width="22" style="color:#10B981"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:.6rem">UI/UX Design</h3><p style="color:var(--ts);font-size:.82rem;line-height:1.7">Clean interfaces designed for conversion and usability.</p></div>
@@ -261,13 +246,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
-<!-- PROJECTS -->
 <section id="projects" style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto">
-<div class="rv" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;gap:1rem">
-<div><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Selected Work</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">Projects That<br>Speak Volumes</h2></div>
-<a href="https://github.com/shayan314" target="_blank" class="bo" style="font-size:.72rem;padding:.55rem 1.25rem">GitHub <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="13"></span></a>
-</div>
+<div class="rv" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;gap:1rem"><div><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Selected Work</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">Projects That<br>Speak Volumes</h2></div><a href="https://github.com/shayan314" target="_blank" class="bo" style="font-size:.72rem;padding:.55rem 1.25rem">GitHub <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="13"></span></a></div>
 <div class="gp">
 <a href="https://github.com/flutter/flutter/tree/master/examples" target="_blank" class="pc rv" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/ecomshop22/800/600" alt="LuxeCart" loading="lazy"><span class="pt">Mobile App</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">LuxeCart</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">Premium e-commerce app with checkout, tracking & recommendations.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Flutter</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Firebase</span></div></div></a>
 <a href="https://github.com/flutter/samples/tree/main/veggieseasons" target="_blank" class="pc rv d1" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/fitapp99/800/600" alt="FitPulse" loading="lazy"><span class="pt">Mobile App</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">FitPulse</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">AI-powered fitness tracker with workout plans & analytics.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Flutter</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Dart</span></div></div></a>
@@ -280,41 +261,28 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
-<!-- TECH STACK -->
 <section style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto">
 <div class="rv" style="text-align:center;margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Tech Stack</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem">Tools & Technologies</h2></div>
 <div class="rv d1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem">
-<span class="tp"><span class="iconify" data-icon="logos:flutter" data-width="15"></span> Flutter</span>
-<span class="tp"><span class="iconify" data-icon="logos:dart" data-width="15"></span> Dart</span>
-<span class="tp"><span class="iconify" data-icon="logos:react" data-width="15"></span> React</span>
-<span class="tp"><span class="iconify" data-icon="logos:nextjs-icon" data-width="15"></span> Next.js</span>
-<span class="tp"><span class="iconify" data-icon="logos:nodejs-icon" data-width="15"></span> Node.js</span>
-<span class="tp"><span class="iconify" data-icon="logos:mongodb-icon" data-width="15"></span> MongoDB</span>
-<span class="tp"><span class="iconify" data-icon="logos:firebase" data-width="15"></span> Firebase</span>
-<span class="tp"><span class="iconify" data-icon="logos:typescript-icon" data-width="15"></span> TypeScript</span>
-<span class="tp"><span class="iconify" data-icon="logos:tailwindcss-icon" data-width="15"></span> Tailwind</span>
-<span class="tp"><span class="iconify" data-icon="logos:figma" data-width="10"></span> Figma</span>
-<span class="tp"><span class="iconify" data-icon="logos:git-icon" data-width="15"></span> Git</span>
-<span class="tp"><span class="iconify" data-icon="logos:github-icon" data-width="15"></span> GitHub</span>
+<span class="tp"><span class="iconify" data-icon="logos:flutter" data-width="15"></span> Flutter</span><span class="tp"><span class="iconify" data-icon="logos:dart" data-width="15"></span> Dart</span><span class="tp"><span class="iconify" data-icon="logos:react" data-width="15"></span> React</span><span class="tp"><span class="iconify" data-icon="logos:nextjs-icon" data-width="15"></span> Next.js</span><span class="tp"><span class="iconify" data-icon="logos:nodejs-icon" data-width="15"></span> Node.js</span><span class="tp"><span class="iconify" data-icon="logos:mongodb-icon" data-width="15"></span> MongoDB</span><span class="tp"><span class="iconify" data-icon="logos:firebase" data-width="15"></span> Firebase</span><span class="tp"><span class="iconify" data-icon="logos:typescript-icon" data-width="15"></span> TypeScript</span><span class="tp"><span class="iconify" data-icon="logos:tailwindcss-icon" data-width="15"></span> Tailwind</span><span class="tp"><span class="iconify" data-icon="logos:figma" data-width="10"></span> Figma</span><span class="tp"><span class="iconify" data-icon="logos:git-icon" data-width="15"></span> Git</span><span class="tp"><span class="iconify" data-icon="logos:github-icon" data-width="15"></span> GitHub</span>
 </div>
 </div>
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
-<!-- REVIEWS -->
 <section id="reviews" style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto">
 <div class="rv" style="margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Client Reviews</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">What People Say</h2></div>
 <div class="rsc rv d1">
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan built our e-commerce app from scratch. Quality was beyond expectations. Runs smooth on both iOS and Android!"</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FF2D78);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AK</div><div><div style="font-size:.8rem;font-weight:600">Ahmed Khan</div><div style="font-size:.68rem;color:var(--tm)">CEO, LuxeCart</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"We needed a fitness app with complex tracking and Shayan delivered perfectly. Communication was always on point."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#818CF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">SR</div><div><div style="font-size:.8rem;font-weight:600">Sarah Rodriguez</div><div style="font-size:.68rem;color:var(--tm)">Founder, FitPulse</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"The SaaS dashboard is insane. Clean UI, real-time data, super fast. Productivity went up significantly."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10B981,#34D399);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">MJ</div><div><div style="font-size:.8rem;font-weight:600">Michael James</div><div style="font-size:.68rem;color:var(--tm)">CTO, CloudDash</div></div></div></div>
-<div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Solid work on real estate platform. Map integration works flawlessly. Delivery was a few days late but result made up for it."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">FA</div><div><div style="font-size:.8rem;font-weight:600">Fatima Ali</div><div style="font-size:.68rem;color:var(--tm)">Manager, EstatePro</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan understood our food delivery concept immediately. Real-time tracking is a game changer. Customers love it!"</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EF4444,#F87171);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">HR</div><div><div style="font-size:.8rem;font-weight:600">Hassan Raza</div><div style="font-size:.68rem;color:var(--tm)">Owner, QuickBite</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Old website was embarrassing. Shayan rebuilt it — now looks like Fortune 500. SEO improved drastically."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#F472B6);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">LN</div><div><div style="font-size:.8rem;font-weight:600">Lisa Nguyen</div><div style="font-size:.68rem;color:var(--tm)">Director, NovaBrand</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Worked with 5-6 devs before. Shayan is different — he thinks about UX. App rating went from 3.2 to 4.8 after his redesign."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#38BDF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">OT</div><div><div style="font-size:.8rem;font-weight:600">Omar Tariq</div><div style="font-size:.68rem;color:var(--tm)">App Founder</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"School management system in 3 weeks. Handles 2000+ students, grades, fees — hasn't crashed once."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">BM</div><div><div style="font-size:.8rem;font-weight:600">Bilal Mahmood</div><div style="font-size:.68rem;color:var(--tm)">Admin, Greenfield Academy</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan built our e-commerce app from scratch. Quality was beyond expectations. Runs smooth on both platforms!"</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FF2D78);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AK</div><div><div style="font-size:.8rem;font-weight:600">Ahmed Khan</div><div style="font-size:.68rem;color:var(--tm)">CEO, LuxeCart</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Complex fitness app delivered perfectly. Communication was always on point — kept me updated throughout."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#818CF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">SR</div><div><div style="font-size:.8rem;font-weight:600">Sarah Rodriguez</div><div style="font-size:.68rem;color:var(--tm)">Founder, FitPulse</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"SaaS dashboard is insane. Clean UI, real-time data, super fast. Productivity went up significantly."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10B981,#34D399);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">MJ</div><div><div style="font-size:.8rem;font-weight:600">Michael James</div><div style="font-size:.68rem;color:var(--tm)">CTO, CloudDash</div></div></div></div>
+<div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Solid work on real estate platform. Map integration works flawlessly. Delivery was slightly late but result made up for it."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">FA</div><div><div style="font-size:.8rem;font-weight:600">Fatima Ali</div><div style="font-size:.68rem;color:var(--tm)">Manager, EstatePro</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Understood our food delivery concept immediately. Real-time tracking is a game changer. Customers love it!"</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EF4444,#F87171);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">HR</div><div><div style="font-size:.8rem;font-weight:600">Hassan Raza</div><div style="font-size:.68rem;color:var(--tm)">Owner, QuickBite</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Old website was embarrassing. Shayan rebuilt it — now looks like a Fortune 500 site. SEO improved drastically."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#F472B6);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">LN</div><div><div style="font-size:.8rem;font-weight:600">Lisa Nguyen</div><div style="font-size:.68rem;color:var(--tm)">Director, NovaBrand</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Worked with 5-6 devs before. Shayan is different — thinks about UX. App rating went from 3.2 to 4.8 after his redesign."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#38BDF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">OT</div><div><div style="font-size:.8rem;font-weight:600">Omar Tariq</div><div style="font-size:.68rem;color:var(--tm)">App Founder</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"School management system in 3 weeks. 2000+ students, grades, fees — hasn't crashed once. Absolute legend."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">BM</div><div><div style="font-size:.8rem;font-weight:600">Bilal Mahmood</div><div style="font-size:.68rem;color:var(--tm)">Admin, Greenfield Academy</div></div></div></div>
 <div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Professional dev. Built inventory app to spec. Bugs fixed same day. I'm a tough grader so 4 stars means a lot haha."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#14B8A6,#5EEAD4);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">ZS</div><div><div style="font-size:.8rem;font-weight:600">Zain Siddiqui</div><div style="font-size:.68rem;color:var(--tm)">Ops Head, TradeMax</div></div></div></div>
 <div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Converted my Figma designs into pixel-perfect Flutter app. I'm a designer so I'm picky — he nailed every detail."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AN</div><div><div style="font-size:.8rem;font-weight:600">Ayesha Noor</div><div style="font-size:.68rem;color:var(--tm)">UI/UX Designer</div></div></div></div>
 <div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Previous dev left midway. Shayan took over messy codebase, cleaned it up, delivered in 10 days. Absolute lifesaver."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">WK</div><div><div style="font-size:.8rem;font-weight:600">Waqas Khalid</div><div style="font-size:.68rem;color:var(--tm)">Product Manager, TechFlow</div></div></div></div>
@@ -324,8 +292,132 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
-<!-- CONTACT -->
 <section id="contact" style="position:relative;z-index:1;padding:5rem 1.25rem">
 <div style="max-width:900px;margin:0 auto;text-align:center">
 <div class="rv"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Get in Touch</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;letter-spacing:-.03em;margin-top:.75rem;line-height:1.1">Have a Project<br>in Mind?</h2><p style="color:var(--ts);font-size:clamp(.85rem,2vw,1rem);line-height:1.7;max-width:460px;margin:1.5rem auto 0">Let's turn your vision into reality. Reach out and let's build something exceptional together.</p></div>
-<div class="rv d1" style
+<div class="rv d1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;margin-top:2.5rem">
+<button onclick="om()" class="bp"><span class="iconify" data-icon="solar:letter-bold" data-width="15"></span> Send a Message</button>
+<a href="https://wa.me/923296427396" target="_blank" class="bo"><span class="iconify" data-icon="mdi:whatsapp" data-width="16" style="color:#25D366"></span> WhatsApp</a>
+</div>
+<div class="rv d2 gc" style="margin-top:3rem">
+<a href="mailto:chshayan314@gmail.com" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:letter-bold-duotone" data-width="24" style="color:#FF6B2C"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">Email</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem;word-break:break-all">chshayan314@gmail.com</div></a>
+<a href="https://wa.me/923296427396" target="_blank" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:phone-calling-bold-duotone" data-width="24" style="color:#10B981"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">WhatsApp</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem">+92 329 6427396</div></a>
+<a href="https://github.com/shayan314" target="_blank" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:code-bold-duotone" data-width="24" style="color:#6366F1"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">GitHub</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem">@shayan314</div></a>
+</div>
+</div>
+</section>
+
+<footer style="position:relative;z-index:1;border-top:1px solid var(--br);padding:2rem 1.25rem">
+<div style="max-width:1400px;margin:0 auto" class="gf">
+<a href="#" class="logo"><span style="font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--t)">SHAYAN</span><span class="gt" style="font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700">.DEV</span></a>
+<p style="font-size:.7rem;color:var(--tm)">© 2026 Shayan Dev. All rights reserved.</p>
+<div style="display:flex;gap:.85rem">
+<a href="https://github.com/shayan314" target="_blank" style="color:var(--tm);transition:color .3s" onmouseover="this.style.color='var(--t)'" onmouseout="this.style.color='var(--tm)'"><span class="iconify" data-icon="mdi:github" data-width="18"></span></a>
+<a href="mailto:chshayan314@gmail.com" style="color:var(--tm);transition:color .3s" onmouseover="this.style.color='var(--t)'" onmouseout="this.style.color='var(--tm)'"><span class="iconify" data-icon="solar:letter-linear" data-width="18"></span></a>
+<a href="https://wa.me/923296427396" target="_blank" style="color:var(--tm);transition:color .3s" onmouseover="this.style.color='var(--t)'" onmouseout="this.style.color='var(--tm)'"><span class="iconify" data-icon="mdi:whatsapp" data-width="18"></span></a>
+</div>
+</div>
+</footer>
+
+<script>
+// Preloader
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('preloader').classList.add('hd')},700)});
+
+// Float badge
+if(window.innerWidth>=1024)document.getElementById('fb').style.display='block';
+window.addEventListener('resize',function(){document.getElementById('fb').style.display=window.innerWidth>=1024?'block':'none'});
+if(window.innerWidth<640)document.getElementById('swpH').style.display='block';
+window.addEventListener('resize',function(){document.getElementById('swpH').style.display=window.innerWidth<640?'block':'none'});
+
+// Theme
+function tg(){document.body.classList.toggle('lm');localStorage.setItem('th',document.body.classList.contains('lm')?'l':'d')}
+if(localStorage.getItem('th')==='l')document.body.classList.add('lm');
+
+// Mobile menu
+var mo=false;
+function tm(){mo=!mo;document.getElementById('mobM').classList.toggle('open',mo);var a=document.getElementById('l1'),b=document.getElementById('l2'),c=document.getElementById('l3');if(mo){a.style.transform='rotate(45deg) translate(4px,4px)';b.style.opacity='0';c.style.transform='rotate(-45deg) translate(4px,-4px)';document.body.style.overflow='hidden'}else{a.style.transform='none';b.style.opacity='1';c.style.transform='none';document.body.style.overflow=''}}
+function cm(){if(mo)tm()}
+
+// Modal open/close + form reset
+function om(){
+    document.getElementById('cMod').classList.add('open');
+    document.body.style.overflow='hidden';
+    document.getElementById('formView').style.display='block';
+    document.getElementById('okView').style.display='none';
+    document.getElementById('fErr').style.display='none';
+    document.getElementById('cF').reset();
+    // Clear all error styles
+    document.querySelectorAll('.fi').forEach(function(i){i.classList.remove('err')});
+    document.querySelectorAll('.fe').forEach(function(e){e.classList.remove('show');e.textContent=''});
+}
+function xm(){document.getElementById('cMod').classList.remove('open');document.body.style.overflow=''}
+
+// ===== FORMSPREE — SIMPLE FETCH (NO EXTERNAL LIBRARY) =====
+document.getElementById('cF').addEventListener('submit',function(e){
+    e.preventDefault();
+
+    var btn=document.getElementById('sB');
+    var errBox=document.getElementById('fErr');
+    errBox.style.display='none';
+
+    // Loading state
+    btn.disabled=true;
+    btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4m0 12v4m-7.07-3.53l2.83-2.83m8.48 8.48l2.83-2.83M2 12h4m12 0h4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83"/></svg></span> Sending...';
+
+    var formData=new FormData(this);
+
+    fetch('https://formspree.io/f/mojowwao',{
+        method:'POST',
+        body:formData,
+        headers:{'Accept':'application/json'}
+    })
+    .then(function(response){
+        btn.disabled=false;
+        btn.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';
+
+        if(response.ok){
+            // SUCCESS — switch views
+            document.getElementById('formView').style.display='none';
+            document.getElementById('okView').style.display='block';
+            document.getElementById('cF').reset();
+        }else{
+            // ERROR from Formspree
+            return response.json().then(function(data){
+                var msg='Something went wrong. Try WhatsApp instead.';
+                if(data.errors && data.errors.length>0){
+                    msg=data.errors[0].message;
+                }
+                errBox.textContent=msg;
+                errBox.style.display='block';
+            }).catch(function(){
+                errBox.textContent='Submission failed. Try WhatsApp instead.';
+                errBox.style.display='block';
+            });
+        }
+    })
+    .catch(function(){
+        btn.disabled=false;
+        btn.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';
+        errBox.textContent='Network error. Check internet & try again.';
+        errBox.style.display='block';
+    });
+});
+
+// Scroll reveal
+var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('on')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(function(el){ro.observe(el)});
+
+// Counter
+var co=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var el=en.target,t=parseInt(el.dataset.target),s=performance.now();(function u(n){var p=Math.min((n-s)/2000,1),v=1-Math.pow(1-p,3);el.textContent=Math.floor(v*t);if(p<1)requestAnimationFrame(u);else el.textContent=t})(s);co.unobserve(el)}})},{threshold:.5});
+document.querySelectorAll('.ctr').forEach(function(c){co.observe(c)});
+
+// Active nav
+var secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nl');
+window.addEventListener('scroll',function(){var cur='';secs.forEach(function(s){if(scrollY>=s.offsetTop-200)cur=s.id});nls.forEach(function(l){l.classList.remove('on');if(l.href.indexOf('#'+cur)!==-1)l.classList.add('on')})});
+
+// Nav bg
+var nav=document.querySelector('nav');
+window.addEventListener('scroll',function(){nav.style.background=scrollY>50?(document.body.classList.contains('lm')?'rgba(248,248,248,.92)':'rgba(5,5,5,.92)'):(document.body.classList.contains('lm')?'rgba(248,248,248,.88)':'rgba(5,5,5,.8)')});
+</script>
+</body>
+</html>
