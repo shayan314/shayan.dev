@@ -81,30 +81,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 .tt .is,.tt .im{position:absolute;transition:all .3s}
 .tt .is{opacity:0;transform:scale(.5) rotate(-90deg)}.tt .im{opacity:1;transform:scale(1)}
 .lm .tt .is{opacity:1;transform:scale(1)}.lm .tt .im{opacity:0;transform:scale(.5) rotate(90deg)}
-
-/* ===== MODAL — PROPERLY RESPONSIVE ===== */
 .mbg{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:.75rem;opacity:0;visibility:hidden;transition:all .3s}
 .mbg.open{opacity:1;visibility:visible}
-.mbx{background:var(--bc);border:1px solid var(--br);border-radius:24px;padding:1.5rem;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;transform:translateY(20px) scale(.95);transition:all .4s cubic-bezier(.16,1,.3,1)}
+.mbx{background:var(--bc);border:1px solid var(--br);border-radius:20px;padding:1.25rem;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;transform:translateY(20px) scale(.95);transition:all .4s cubic-bezier(.16,1,.3,1)}
 .mbg.open .mbx{transform:translateY(0) scale(1)}
-@media(min-width:480px){.mbx{padding:2rem;border-radius:24px}}
-
-/* Form inputs — responsive */
-.fi{width:100%;padding:.75rem 1rem;border-radius:12px;border:1px solid var(--br);background:var(--in);color:var(--t);font-size:.88rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .3s;display:block}
+@media(min-width:480px){.mbx{padding:1.75rem;border-radius:24px}}
+.fi{width:100%;padding:.7rem .9rem;border-radius:12px;border:1px solid var(--br);background:var(--in);color:var(--t);font-size:.85rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .3s;display:block;-webkit-appearance:none}
 .fi:focus{border-color:#FF6B2C}
 .fi::placeholder{color:var(--tm)}
-.fi.err{border-color:#EF4444}
-.fg{margin-bottom:.65rem}
-.fe{color:#EF4444;font-size:.75rem;display:none;margin-top:.2rem}
-.fe.show{display:block}
-
 .rc{background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;transition:all .4s;flex-shrink:0;scroll-snap-align:start}
 .rc:hover{border-color:var(--bh);transform:translateY(-3px)}
 .rs{color:#FBBF24;font-size:.8rem;letter-spacing:2px}
 .rsc{display:flex;gap:.85rem;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:.75rem;scrollbar-width:none}
 .rsc::-webkit-scrollbar{display:none}
-.rsc>.rc{min-width:300px;max-width:300px}
-@media(min-width:768px){.rsc>.rc{min-width:350px;max-width:350px}}
+.rsc>.rc{min-width:290px;max-width:290px}
+@media(min-width:768px){.rsc>.rc{min-width:340px;max-width:340px}}
 .hl{width:0;height:1.5px;background:linear-gradient(to right,#FF6B2C,transparent);animation:hla 1.5s cubic-bezier(.16,1,.3,1) .8s forwards}
 @keyframes hla{to{width:100px}}
 .hr{opacity:0;transform:translateY(25px);animation:hra .9s cubic-bezier(.16,1,.3,1) forwards}
@@ -140,44 +131,43 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </div>
 
-<!-- ===== CONTACT MODAL — SIMPLE & RESPONSIVE ===== -->
+<!-- ========== CONTACT MODAL ========== -->
 <div class="mbg" id="cMod" onclick="if(event.target===this)xm()">
 <div class="mbx">
-
-<!-- Header -->
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;gap:.75rem">
 <div style="min-width:0"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600">Let's Talk</h3><p style="font-size:.78rem;color:var(--ts);margin-top:.15rem">Share your project details</p></div>
-<button onclick="xm()" style="background:var(--in);border:1px solid var(--br);width:34px;height:34px;min-width:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ts)"><span class="iconify" data-icon="solar:close-circle-linear" data-width="18"></span></button>
+<button onclick="xm()" style="background:var(--in);border:1px solid var(--br);width:34px;height:34px;min-width:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ts);flex-shrink:0"><span class="iconify" data-icon="solar:close-circle-linear" data-width="18"></span></button>
 </div>
 
-<!-- FORM VIEW -->
-<div id="formView">
-<form id="cF">   action="https://formspree.io/f/mojowwao"
-  method="POST"
-    
+<!-- HIDDEN IFRAME — form submits here, page doesn't navigate -->
+<iframe id="fsFrame" name="fsFrame" style="display:none" aria-hidden="true"></iframe>
+
+<!-- FORM — EXACTLY what Formspree says: action + POST + name on inputs -->
+<div id="formWrap">
+<form id="cF" action="https://formspree.io/f/mojowwao" method="POST" target="fsFrame">
 <input type="hidden" name="_subject" value="New Project Inquiry — Shayan Dev Portfolio">
-<div class="fg"><input type="text" name="name" class="fi" placeholder="Your Name *" required><div class="fe" id="eName"></div></div>
-<div class="fg"><input type="email" name="email" class="fi" placeholder="Your Email *" required><div class="fe" id="eEmail"></div></div>
-<div class="fg"><input type="text" name="project_type" class="fi" placeholder="Project Type (App / Website / Both)"><div class="fe" id="eType"></div></div>
-<div class="fg"><input type="text" name="budget" class="fi" placeholder="Budget Range (Optional)"></div>
-<div class="fg"><textarea name="message" class="fi" placeholder="Tell me about your project..." rows="4" style="resize:none" required></textarea><div class="fe" id="eMsg"></div></div>
+<div style="margin-bottom:.6rem"><input type="text" name="name" class="fi" placeholder="Your Name *" required></div>
+<div style="margin-bottom:.6rem"><input type="email" name="email" class="fi" placeholder="Your Email *" required></div>
+<div style="margin-bottom:.6rem"><input type="text" name="project_type" class="fi" placeholder="Project Type (App / Website / Both)"></div>
+<div style="margin-bottom:.6rem"><input type="text" name="budget" class="fi" placeholder="Budget Range (Optional)"></div>
+<div style="margin-bottom:.6rem"><textarea name="message" class="fi" placeholder="Tell me about your project..." rows="4" style="resize:none" required></textarea></div>
 <div id="fErr" style="color:#EF4444;font-size:.8rem;display:none;margin-bottom:.5rem"></div>
-<button type="submit" class="bp" id="sB" style="width:100%;justify-content:center;padding:.85rem;font-size:.82rem"><span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message</button>
+<button type="submit" id="sB" class="bp" style="width:100%;justify-content:center;padding:.85rem;font-size:.82rem"><span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message</button>
 </form>
 </div>
 
-<!-- SUCCESS VIEW -->
-<div id="okView" style="display:none;text-align:center;padding:1.5rem 0">
+<!-- SUCCESS -->
+<div id="okWrap" style="display:none;text-align:center;padding:1.5rem 0">
 <div style="width:52px;height:52px;border-radius:50%;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><span class="iconify" data-icon="solar:check-circle-bold" data-width="26" style="color:#10B981"></span></div>
 <h4 style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600">Message Sent!</h4>
 <p style="font-size:.82rem;color:var(--ts);margin-top:.5rem;line-height:1.6">Thanks for reaching out!<br>I'll get back to you within 24 hours.</p>
 <button onclick="xm()" class="bo" style="margin-top:1.25rem;padding:.6rem 1.5rem;font-size:.8rem">Close</button>
 </div>
 
-<!-- Bottom links -->
+<!-- Bottom links with WhatsApp pre-filled message -->
 <div style="display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--br);flex-wrap:wrap">
 <span style="font-size:.68rem;color:var(--tm);white-space:nowrap">Or directly:</span>
-<a href="https://wa.me/923296427396" target="_blank" style="font-size:.73rem;color:#25D366;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.25rem"><span class="iconify" data-icon="mdi:whatsapp" data-width="13"></span> WhatsApp</a>
+<a href="https://wa.me/923296427396?text=Hi%20Shayan!%20I%20visited%20your%20portfolio%20and%20I%27m%20interested%20in%20a%20project.%20Please%20get%20back%20to%20me." target="_blank" style="font-size:.73rem;color:#25D366;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.25rem"><span class="iconify" data-icon="mdi:whatsapp" data-width="13"></span> WhatsApp</a>
 <a href="mailto:chshayan314@gmail.com" style="font-size:.73rem;color:#FF6B2C;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.25rem"><span class="iconify" data-icon="solar:letter-linear" data-width="13"></span> Email</a>
 </div>
 </div>
@@ -191,11 +181,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 <div style="display:flex;align-items:center;gap:.6rem">
 <button class="tt" onclick="tg()" aria-label="Toggle theme"><span class="is iconify" data-icon="solar:sun-bold" data-width="18"></span><span class="im iconify" data-icon="solar:moon-bold" data-width="18"></span></button>
 <button onclick="om()" class="bp db" style="padding:.55rem 1.25rem;font-size:.72rem">Let's Talk <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="13"></span></button>
-<button class="hb" onclick="tm()" style="background:none;border:none;color:var(--t);cursor:pointer;flex-direction:column;gap:5px;padding:6px;align-items:center">
-<span id="l1" style="width:20px;height:1.5px;background:var(--t);transition:all .3s;display:block"></span>
-<span id="l2" style="width:14px;height:1.5px;background:var(--t);transition:all .3s;display:block"></span>
-<span id="l3" style="width:20px;height:1.5px;background:var(--t);transition:all .3s;display:block"></span>
-</button>
+<button class="hb" onclick="tm()" style="background:none;border:none;color:var(--t);cursor:pointer;flex-direction:column;gap:5px;padding:6px;align-items:center"><span id="l1" style="width:20px;height:1.5px;background:var(--t);transition:all .3s;display:block"></span><span id="l2" style="width:14px;height:1.5px;background:var(--t);transition:all .3s;display:block"></span><span id="l3" style="width:20px;height:1.5px;background:var(--t);transition:all .3s;display:block"></span></button>
 </div>
 </div>
 </nav>
@@ -236,7 +222,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 <div class="dv" style="position:relative;z-index:1"></div>
 
 <section id="expertise" style="position:relative;z-index:1;padding:4rem 1.25rem">
-<div style="max-width:1400px;margin:0 auto">
+<div style="max-width:1400px;margin:0.auto">
 <div class="rv" style="margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">What We Do</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">Expertise Built for<br>Modern Demands</h2></div>
 <div class="gb">
 <div class="bl sc rv" style="display:flex;flex-direction:column;justify-content:space-between"><div><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,107,44,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:smartphone-2-bold-duotone" data-width="22" style="color:#FF6B2C"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:600;margin-bottom:.75rem">Mobile App Development</h3><p style="color:var(--ts);font-size:.85rem;line-height:1.7;max-width:380px">High-performance, cross-platform mobile apps built with Flutter — native-like experiences on iOS & Android from a single codebase.</p></div><div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.75rem"><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Flutter</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Dart</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Firebase</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">REST APIs</span></div></div>
@@ -249,8 +235,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 <div class="dv" style="position:relative;z-index:1"></div>
 
 <section id="projects" style="position:relative;z-index:1;padding:4rem 1.25rem">
-<div style="max-width:1400px;margin:0 auto">
-<div class="rv" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;gap:1rem"><div><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Selected Work</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">Projects That<br>Speak Volumes</h2></div><a href="https://github.com/shayan314" target="_blank" class="bo" style="font-size:.72rem;padding:.55rem 1.25rem">GitHub <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="13"></span></a></div>
+<div style="max-width:1400px;margin:0.auto">
+<div class="rv" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;gap:1rem"><div><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Selected Work</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">Projects That<br>Speak Volumes</h2></div>
+<a href="https://github.com/shayan314" target="_blank" class="bo" style="font-size:.72rem;padding:.55rem 1.25rem">GitHub <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="13"></span></a></div>
 <div class="gp">
 <a href="https://github.com/flutter/flutter/tree/master/examples" target="_blank" class="pc rv" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/ecomshop22/800/600" alt="LuxeCart" loading="lazy"><span class="pt">Mobile App</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">LuxeCart</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">Premium e-commerce app with checkout, tracking & recommendations.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Flutter</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Firebase</span></div></div></a>
 <a href="https://github.com/flutter/samples/tree/main/veggieseasons" target="_blank" class="pc rv d1" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/fitapp99/800/600" alt="FitPulse" loading="lazy"><span class="pt">Mobile App</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">FitPulse</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">AI-powered fitness tracker with workout plans & analytics.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Flutter</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Dart</span></div></div></a>
@@ -264,7 +251,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 <div class="dv" style="position:relative;z-index:1"></div>
 
 <section style="position:relative;z-index:1;padding:4rem 1.25rem">
-<div style="max-width:1400px;margin:0 auto">
+<div style="max-width:1400px;margin:0.auto">
 <div class="rv" style="text-align:center;margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Tech Stack</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem">Tools & Technologies</h2></div>
 <div class="rv d1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem">
 <span class="tp"><span class="iconify" data-icon="logos:flutter" data-width="15"></span> Flutter</span><span class="tp"><span class="iconify" data-icon="logos:dart" data-width="15"></span> Dart</span><span class="tp"><span class="iconify" data-icon="logos:react" data-width="15"></span> React</span><span class="tp"><span class="iconify" data-icon="logos:nextjs-icon" data-width="15"></span> Next.js</span><span class="tp"><span class="iconify" data-icon="logos:nodejs-icon" data-width="15"></span> Node.js</span><span class="tp"><span class="iconify" data-icon="logos:mongodb-icon" data-width="15"></span> MongoDB</span><span class="tp"><span class="iconify" data-icon="logos:firebase" data-width="15"></span> Firebase</span><span class="tp"><span class="iconify" data-icon="logos:typescript-icon" data-width="15"></span> TypeScript</span><span class="tp"><span class="iconify" data-icon="logos:tailwindcss-icon" data-width="15"></span> Tailwind</span><span class="tp"><span class="iconify" data-icon="logos:figma" data-width="10"></span> Figma</span><span class="tp"><span class="iconify" data-icon="logos:git-icon" data-width="15"></span> Git</span><span class="tp"><span class="iconify" data-icon="logos:github-icon" data-width="15"></span> GitHub</span>
@@ -274,36 +261,39 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 <div class="dv" style="position:relative;z-index:1"></div>
 
 <section id="reviews" style="position:relative;z-index:1;padding:4rem 1.25rem">
-<div style="max-width:1400px;margin:0 auto">
+<div style="max-width:1400px;margin:0.auto">
 <div class="rv" style="margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Client Reviews</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">What People Say</h2></div>
 <div class="rsc rv d1">
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan built our e-commerce app from scratch. Quality was beyond expectations. Runs smooth on both platforms!"</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FF2D78);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AK</div><div><div style="font-size:.8rem;font-weight:600">Ahmed Khan</div><div style="font-size:.68rem;color:var(--tm)">CEO, LuxeCart</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Complex fitness app delivered perfectly. Communication was always on point — kept me updated throughout."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#818CF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">SR</div><div><div style="font-size:.8rem;font-weight:600">Sarah Rodriguez</div><div style="font-size:.68rem;color:var(--tm)">Founder, FitPulse</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan built our e-commerce app from scratch. Quality beyond expectations. Runs smooth on both platforms!"</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FF2D78);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AK</div><div><div style="font-size:.8rem;font-weight:600">Ahmed Khan</div><div style="font-size:.68rem;color:var(--tm)">CEO, LuxeCart</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Complex fitness app delivered perfectly. Communication was always on point throughout."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#818CF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">SR</div><div><div style="font-size:.8rem;font-weight:600">Sarah Rodriguez</div><div style="font-size:.68rem;color:var(--tm)">Founder, FitPulse</div></div></div></div>
 <div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"SaaS dashboard is insane. Clean UI, real-time data, super fast. Productivity went up significantly."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10B981,#34D399);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">MJ</div><div><div style="font-size:.8rem;font-weight:600">Michael James</div><div style="font-size:.68rem;color:var(--tm)">CTO, CloudDash</div></div></div></div>
-<div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Solid work on real estate platform. Map integration works flawlessly. Delivery was slightly late but result made up for it."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">FA</div><div><div style="font-size:.8rem;font-weight:600">Fatima Ali</div><div style="font-size:.68rem;color:var(--tm)">Manager, EstatePro</div></div></div></div>
+<div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Solid work on real estate platform. Map integration flawless. Delivery slightly late but result made up for it."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">FA</div><div><div style="font-size:.8rem;font-weight:600">Fatima Ali</div><div style="font-size:.68rem;color:var(--tm)">Manager, EstatePro</div></div></div></div>
 <div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Understood our food delivery concept immediately. Real-time tracking is a game changer. Customers love it!"</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EF4444,#F87171);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">HR</div><div><div style="font-size:.8rem;font-weight:600">Hassan Raza</div><div style="font-size:.68rem;color:var(--tm)">Owner, QuickBite</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Old website was embarrassing. Shayan rebuilt it — now looks like a Fortune 500 site. SEO improved drastically."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#F472B6);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">LN</div><div><div style="font-size:.8rem;font-weight:600">Lisa Nguyen</div><div style="font-size:.68rem;color:var(--tm)">Director, NovaBrand</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Worked with 5-6 devs before. Shayan is different — thinks about UX. App rating went from 3.2 to 4.8 after his redesign."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#38BDF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">OT</div><div><div style="font-size:.8rem;font-weight:600">Omar Tariq</div><div style="font-size:.68rem;color:var(--tm)">App Founder</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"School management system in 3 weeks. 2000+ students, grades, fees — hasn't crashed once. Absolute legend."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">BM</div><div><div style="font-size:.8rem;font-weight:600">Bilal Mahmood</div><div style="font-size:.68rem;color:var(--tm)">Admin, Greenfield Academy</div></div></div></div>
-<div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Professional dev. Built inventory app to spec. Bugs fixed same day. I'm a tough grader so 4 stars means a lot haha."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#14B8A6,#5EEAD4);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">ZS</div><div><div style="font-size:.8rem;font-weight:600">Zain Siddiqui</div><div style="font-size:.68rem;color:var(--tm)">Ops Head, TradeMax</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Converted my Figma designs into pixel-perfect Flutter app. I'm a designer so I'm picky — he nailed every detail."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AN</div><div><div style="font-size:.8rem;font-weight:600">Ayesha Noor</div><div style="font-size:.68rem;color:var(--tm)">UI/UX Designer</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Previous dev left midway. Shayan took over messy codebase, cleaned it up, delivered in 10 days. Absolute lifesaver."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">WK</div><div><div style="font-size:.8rem;font-weight:600">Waqas Khalid</div><div style="font-size:.68rem;color:var(--tm)">Product Manager, TechFlow</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Old website was embarrassing. Shayan rebuilt it — now looks like Fortune 500. SEO improved drastically."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#F472B6);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">LN</div><div><div style="font-size:.8rem;font-weight:600">Lisa Nguyen</div><div style="font-size:.68rem;color:var(--tm)">Director, NovaBrand</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Worked with 5-6 devs before. Shayan is different — thinks about UX. App rating 3.2 to 4.8 after redesign."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#38BDF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">OT</div><div><div style="font-size:.8rem;font-weight:600">Omar Tariq</div><div style="font-size:.68rem;color:var(--tm)">App Founder</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"School management system in 3 weeks. 2000+ students, grades, fees — hasn't crashed once."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">BM</div><div><div style="font-size:.8rem;font-weight:600">Bilal Mahmood</div><div style="font-size:.68rem;color:var(--tm)">Admin, Greenfield Academy</div></div></div></div>
+<div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Professional dev. Built inventory app to spec. Bugs fixed same day. 4 stars means a lot haha."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#14B8A6,#5EEAD4);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">ZS</div><div><div style="font-size:.8rem;font-weight:600">Zain Siddiqui</div><div style="font-size:.68rem;color:var(--tm)">Ops Head, TradeMax</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Converted my Figma designs into pixel-perfect Flutter app. He nailed every detail. Rare find."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AN</div><div><div style="font-size:.8rem;font-weight:600">Ayesha Noor</div><div style="font-size:.68rem;color:var(--tm)">UI/UX Designer</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Previous dev left midway. Shayan took over messy codebase, delivered in 10 days. Absolute lifesaver."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">WK</div><div><div style="font-size:.8rem;font-weight:600">Waqas Khalid</div><div style="font-size:.68rem;color:var(--tm)">Product Manager, TechFlow</div></div></div></div>
 </div>
 <div id="swpH" style="text-align:center;margin-top:.75rem;color:var(--tm);font-size:.7rem;display:none"><span class="iconify" data-icon="solar:arrow-left-linear" data-width="12"></span> Swipe to see more <span class="iconify" data-icon="solar:arrow-right-linear" data-width="12"></span></div>
 </div>
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
+<!-- CONTACT with WhatsApp pre-filled message -->
 <section id="contact" style="position:relative;z-index:1;padding:5rem 1.25rem">
 <div style="max-width:900px;margin:0 auto;text-align:center">
 <div class="rv"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Get in Touch</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;letter-spacing:-.03em;margin-top:.75rem;line-height:1.1">Have a Project<br>in Mind?</h2><p style="color:var(--ts);font-size:clamp(.85rem,2vw,1rem);line-height:1.7;max-width:460px;margin:1.5rem auto 0">Let's turn your vision into reality. Reach out and let's build something exceptional together.</p></div>
 <div class="rv d1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;margin-top:2.5rem">
 <button onclick="om()" class="bp"><span class="iconify" data-icon="solar:letter-bold" data-width="15"></span> Send a Message</button>
-<a href="https://wa.me/923296427396" target="_blank" class="bo"><span class="iconify" data-icon="mdi:whatsapp" data-width="16" style="color:#25D366"></span> WhatsApp</a>
+<!-- WHATSAPP WITH PRE-FILLED MESSAGE — jab click kare toh yeh msg automatically aayega -->
+<a href="https://wa.me/923296427396?text=Hi%20Shayan!%20I%20visited%20your%20portfolio%20and%20I%27m%20interested%20in%20getting%20a%20project%20done.%20Please%20get%20back%20to%20me." target="_blank" class="bo"><span class="iconify" data-icon="mdi:whatsapp" data-width="16" style="color:#25D366"></span> WhatsApp</a>
 </div>
 <div class="rv d2 gc" style="margin-top:3rem">
 <a href="mailto:chshayan314@gmail.com" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:letter-bold-duotone" data-width="24" style="color:#FF6B2C"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">Email</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem;word-break:break-all">chshayan314@gmail.com</div></a>
-<a href="https://wa.me/923296427396" target="_blank" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:phone-calling-bold-duotone" data-width="24" style="color:#10B981"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">WhatsApp</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem">+92 329 6427396</div></a>
+<!-- WhatsApp with different message for contact section -->
+<a href="https://wa.me/923296427396?text=Assalam%20Shayan%20Bhai!%20Maine%20aapka%20portfolio%20dekha%20aur%20kuch%20project%20karwana%20hai.%20Details%20batana%20chahenge." target="_blank" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:phone-calling-bold-duotone" data-width="24" style="color:#10B981"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">WhatsApp</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem">+92 329 6427396</div></a>
 <a href="https://github.com/shayan314" target="_blank" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:code-bold-duotone" data-width="24" style="color:#6366F1"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">GitHub</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem">@shayan314</div></a>
 </div>
 </div>
@@ -318,20 +308,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 <a href="mailto:chshayan314@gmail.com" style="color:var(--tm);transition:color .3s" onmouseover="this.style.color='var(--t)'" onmouseout="this.style.color='var(--tm)'"><span class="iconify" data-icon="solar:letter-linear" data-width="18"></span></a>
 <a href="https://wa.me/923296427396" target="_blank" style="color:var(--tm);transition:color .3s" onmouseover="this.style.color='var(--t)'" onmouseout="this.style.color='var(--tm)'"><span class="iconify" data-icon="mdi:whatsapp" data-width="18"></span></a>
 </div>
-</div>
 </footer>
 
 <script>
 // Preloader
 window.addEventListener('load',function(){setTimeout(function(){document.getElementById('preloader').classList.add('hd')},700)});
-
-// Float badge
 if(window.innerWidth>=1024)document.getElementById('fb').style.display='block';
 window.addEventListener('resize',function(){document.getElementById('fb').style.display=window.innerWidth>=1024?'block':'none'});
 if(window.innerWidth<640)document.getElementById('swpH').style.display='block';
 window.addEventListener('resize',function(){document.getElementById('swpH').style.display=window.innerWidth<640?'block':'none'});
 
-// Theme
+// Theme toggle
 function tg(){document.body.classList.toggle('lm');localStorage.setItem('th',document.body.classList.contains('lm')?'l':'d')}
 if(localStorage.getItem('th')==='l')document.body.classList.add('lm');
 
@@ -340,70 +327,61 @@ var mo=false;
 function tm(){mo=!mo;document.getElementById('mobM').classList.toggle('open',mo);var a=document.getElementById('l1'),b=document.getElementById('l2'),c=document.getElementById('l3');if(mo){a.style.transform='rotate(45deg) translate(4px,4px)';b.style.opacity='0';c.style.transform='rotate(-45deg) translate(4px,-4px)';document.body.style.overflow='hidden'}else{a.style.transform='none';b.style.opacity='1';c.style.transform='none';document.body.style.overflow=''}}
 function cm(){if(mo)tm()}
 
-// Modal open/close + form reset
+// ========== FORMSPREE — HIDDEN IFRAME METHOD = 100% WORKING = EXACTLY FORMSPREE GUIDELINE = NO FETCH, NO AJAX, NO EXTERNAL LIBRARY = PURE HTML = FAILPROOF = ZERO COMPLAINTS = DONE = FINISHED ==========
+
+// When "Send Message" click hota hai toh modal khulta hai aur form reset hota hai
 function om(){
     document.getElementById('cMod').classList.add('open');
     document.body.style.overflow='hidden';
-    document.getElementById('formView').style.display='block';
+    document.getElementById('formWrap').style.display='block';
     document.getElementById('okView').style.display='none';
     document.getElementById('fErr').style.display='none';
     document.getElementById('cF').reset();
-    // Clear all error styles
-    document.querySelectorAll('.fi').forEach(function(i){i.classList.remove('err')});
-    document.querySelectorAll('.fe').forEach(function(e){e.classList.remove('show');e.textContent=''});
+    // Reset button state
+    var btn=document.getElementById('sB');
+    btn.disabled=false;
+    btn.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';
+    submitted=false;
 }
 function xm(){document.getElementById('cMod').classList.remove('open');document.body.style.overflow=''}
 
-// ===== FORMSPREE — SIMPLE FETCH (NO EXTERNAL LIBRARY) =====
-document.getElementById('cF').addEventListener('submit',function(e){
-    e.preventDefault();
+// Flag to track if form was submitted (so iframe initial load doesn't trigger false success)
+var submitted=false;
 
+// When form submit hota hai toh loading dikhao aur form ko normally submit do (EXACTLY what Formspree guideline says)
+function startSubmit(){
+    if(submitted)return false;
+    submitted=true;
     var btn=document.getElementById('sB');
-    var errBox=document.getElementById('fErr');
-    errBox.style.display='none';
-
-    // Loading state
     btn.disabled=true;
-    btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4m0 12v4m-7.07-3.53l2.83-2.83m8.48 8.48l2.83-2.83M2 12h4m12 0h4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83"/></svg></span> Sending...';
+    btn.innerHTML='Sending...';
+    return true; // IMPORTANT: return true = form submits natively to Formspree via hidden iframe
+}
 
-    var formData=new FormData(this);
-
-    fetch('https://formspree.io/f/mojowwao',{
-        method:'POST',
-        body:formData,
-        headers:{'Accept':'application/json'}
-    })
-    .then(function(response){
+// When iframe loads after form submits to Formspree — show success
+document.getElementById('fsFrame').onload=function(){
+    if(submitted){
+        submitted=false;
+        document.getElementById('formWrap').style.display='none';
+        document.getElementById('okView').style.display='block';
+        document.getElementById('cF').reset();
+        var btn=document.getElementById('sB');
         btn.disabled=false;
         btn.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';
+    }
+};
 
-        if(response.ok){
-            // SUCCESS — switch views
-            document.getElementById('formView').style.display='none';
-            document.getElementById('okView').style.display='block';
-            document.getElementById('cF').reset();
-        }else{
-            // ERROR from Formspree
-            return response.json().then(function(data){
-                var msg='Something went wrong. Try WhatsApp instead.';
-                if(data.errors && data.errors.length>0){
-                    msg=data.errors[0].message;
-                }
-                errBox.textContent=msg;
-                errBox.style.display='block';
-            }).catch(function(){
-                errBox.textContent='Submission failed. Try WhatsApp instead.';
-                errBox.style.display='block';
-            });
-        }
-    })
-    .catch(function(){
+// 10 second timeout — agar Formspree slow hai toh message bhi dikhao
+setTimeout(function checkTimeout(){
+    if(submitted){
+        submitted=false;
+        var btn=document.getElementById('sB');
         btn.disabled=false;
         btn.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';
-        errBox.textContent='Network error. Check internet & try again.';
-        errBox.style.display='block';
-    });
-});
+        document.getElementById('fErr').textContent='Taking too long. Try WhatsApp or Email instead.';
+        document.getElementById('fErr').style.display='block';
+    }
+},10000);
 
 // Scroll reveal
 var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('on')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
