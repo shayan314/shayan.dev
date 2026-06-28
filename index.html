@@ -55,6 +55,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 .nl:hover::after,.nl.on::after{width:100%}
 .bp{background:#FF6B2C;color:#fff;padding:.8rem 1.75rem;border-radius:100px;font-size:.78rem;font-weight:600;letter-spacing:.02em;transition:all .3s;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;white-space:nowrap}
 .bp:hover{background:#E55A1B;transform:translateY(-2px);box-shadow:0 10px 40px rgba(255,107,44,.3)}
+.bp:disabled{opacity:.7;cursor:not-allowed;transform:none!important;box-shadow:none!important}
 .bo{background:transparent;color:var(--t);padding:.8rem 1.75rem;border-radius:100px;font-size:.78rem;font-weight:500;letter-spacing:.02em;transition:all .3s;border:1px solid var(--br);cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;white-space:nowrap}
 .bo:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.03)}
 .lm .bo:hover{border-color:rgba(0,0,0,.2);background:rgba(0,0,0,.03)}
@@ -107,13 +108,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 @media(max-width:768px){.dn{display:none!important}.db{display:none!important}.hb{display:flex!important}}
 .logo{display:flex;align-items:center;gap:.3rem;white-space:nowrap;text-decoration:none;flex-shrink:0}
 .av{width:7px;height:7px;background:#FF6B2C;border-radius:50%;animation:pulse 2s ease infinite;flex-shrink:0}
+.err-msg{color:#EF4444;font-size:.78rem;margin-top:-.3rem;display:none;text-align:left}
 </style>
 </head>
 <body>
+
 <div class="pl" id="preloader"><div style="font-family:'Space Grotesk',sans-serif;font-size:.75rem;color:#555;letter-spacing:.15em;text-transform:uppercase">SHAYAN.DEV</div><div class="pb"></div></div>
 <svg class="noise" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
 <div class="orb o1"></div><div class="orb o2"></div>
 
+<!-- MOBILE MENU -->
 <div class="mm" id="mobM">
 <a href="#work" onclick="cm()">Work</a>
 <a href="#expertise" onclick="cm()">Expertise</a>
@@ -126,26 +130,34 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </div>
 
+<!-- CONTACT MODAL WITH FORMSPREE -->
 <div class="mbg" id="cMod" onclick="if(event.target===this)xm()">
 <div class="mbx">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
 <div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600">Let's Talk</h3><p style="font-size:.8rem;color:var(--ts);margin-top:.25rem">Share your project details</p></div>
 <button onclick="xm()" style="background:var(--in);border:1px solid var(--br);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ts)"><span class="iconify" data-icon="solar:close-circle-linear" data-width="20"></span></button>
 </div>
-<form id="cF" action="https://formspree.io/f/mojowwao" method="POST" onsubmit="hs(event)" style="display:flex;flex-direction:column;gap:.8rem">
-<input type="text" class="mi" placeholder="Your Name" required>
-<input type="email" class="mi" placeholder="Your Email" required>
-<input type="text" class="mi" placeholder="Project Type (App / Website / Both)">
-<input type="text" class="mi" placeholder="Budget Range (Optional)">
-<textarea class="mi" placeholder="Tell me about your project..." rows="4" style="resize:none" required></textarea>
+
+<!-- FORM — FORMSPREE INTEGRATED -->
+<form id="cF" action="https://formspree.io/f/mojowwao" method="POST" style="display:flex;flex-direction:column;gap:.8rem">
+<input type="hidden" name="_subject" value="New Project Inquiry — Shayan Dev Portfolio">
+<input type="text" name="name" class="mi" placeholder="Your Name" required>
+<input type="email" name="email" class="mi" placeholder="Your Email" required>
+<input type="text" name="project_type" class="mi" placeholder="Project Type (App / Website / Both)">
+<input type="text" name="budget" class="mi" placeholder="Budget Range (Optional)">
+<textarea name="message" class="mi" placeholder="Tell me about your project..." rows="4" style="resize:none" required></textarea>
+<div id="fErr" class="err-msg">Something went wrong. Please try again or use WhatsApp.</div>
 <button type="submit" class="bp" style="width:100%;justify-content:center;padding:1rem;margin-top:.5rem" id="sB"><span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message</button>
 </form>
+
+<!-- SUCCESS MESSAGE -->
 <div id="fOk" style="display:none;text-align:center;padding:2rem 0">
 <div style="width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><span class="iconify" data-icon="solar:check-circle-bold" data-width="28" style="color:#10B981"></span></div>
 <h4 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600">Message Sent!</h4>
 <p style="font-size:.82rem;color:var(--ts);margin-top:.5rem;line-height:1.6">Thanks for reaching out! I'll get back to you within 24 hours.</p>
 <button onclick="xm()" class="bo" style="margin-top:1.5rem;padding:.65rem 1.5rem">Close</button>
 </div>
+
 <div style="display:flex;align-items:center;gap:1rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--br);flex-wrap:wrap">
 <span style="font-size:.7rem;color:var(--tm)">Or reach directly:</span>
 <a href="https://wa.me/923296427396" target="_blank" style="font-size:.75rem;color:#25D366;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.3rem"><span class="iconify" data-icon="mdi:whatsapp" data-width="14"></span> WhatsApp</a>
@@ -154,6 +166,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </div>
 
+<!-- NAVIGATION -->
 <nav style="position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--bn);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--br);transition:background .4s">
 <div style="max-width:1400px;margin:0 auto;padding:.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem">
 <a href="#" class="logo"><span style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--t)">SHAYAN</span><span class="gt" style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700">.DEV</span></a>
@@ -170,6 +183,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </nav>
 
+<!-- HERO -->
 <section style="min-height:100vh;display:flex;align-items:center;position:relative;z-index:1;padding:0 1.25rem">
 <div style="max-width:1400px;margin:0 auto;width:100%;padding-top:80px">
 <div class="hr h1" style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.75rem"><div class="av"></div><span style="font-size:.7rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--ts)">Available for Projects</span></div>
@@ -187,6 +201,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </section>
 
+<!-- MARQUEE -->
 <div style="position:relative;z-index:1;border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:1rem 0;overflow:hidden">
 <div class="mt">
 <span style="display:flex;align-items:center;gap:2.5rem;padding-right:2.5rem;font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:500;color:var(--mc);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap">FLUTTER<span style="color:#FF6B2C">✦</span>DART<span style="color:#FF6B2C">✦</span>REACT<span style="color:#FF6B2C">✦</span>NEXT.JS<span style="color:#FF6B2C">✦</span>FIREBASE<span style="color:#FF6B2C">✦</span>NODE.JS<span style="color:#FF6B2C">✦</span>MONGODB<span style="color:#FF6B2C">✦</span>TYPESCRIPT<span style="color:#FF6B2C">✦</span>TAILWIND<span style="color:#FF6B2C">✦</span>FIGMA<span style="color:#FF6B2C">✦</span>FULL STACK<span style="color:#FF6B2C">✦</span></span>
@@ -194,6 +209,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </div>
 
+<!-- STATS -->
 <section id="work" style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto" class="gs">
 <div class="rv" style="text-align:center;padding:1.25rem 0"><div class="sn gt" style="font-size:clamp(2rem,5vw,3.5rem)"><span class="ctr" data-target="4">0</span></div><div style="font-size:.7rem;color:var(--ts);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-top:.6rem">Years Experience</div></div>
@@ -204,6 +220,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
+<!-- EXPERTISE -->
 <section id="expertise" style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto">
 <div class="rv" style="margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">What We Do</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">Expertise Built for<br>Modern Demands</h2></div>
@@ -220,6 +237,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
+<!-- PROJECTS -->
 <section id="projects" style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto">
 <div class="rv" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;gap:1rem">
@@ -238,6 +256,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
+<!-- TECH STACK -->
 <section style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto">
 <div class="rv" style="text-align:center;margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Tech Stack</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem">Tools & Technologies</h2></div>
@@ -259,6 +278,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
+<!-- REVIEWS -->
 <section id="reviews" style="position:relative;z-index:1;padding:4rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto">
 <div class="rv" style="margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Client Reviews</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">What People Say</h2></div>
@@ -272,14 +292,15 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 <div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"I've worked with 5-6 devs before and Shayan is genuinely different. He thinks about UX. My app rating went from 3.2 to 4.8 after his redesign."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#38BDF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">OT</div><div><div style="font-size:.8rem;font-weight:600">Omar Tariq</div><div style="font-size:.68rem;color:var(--tm)">App Founder</div></div></div></div>
 <div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan delivered our school management system in 3 weeks. Handles 2000+ students, attendance, grades, fees — hasn't crashed once."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">BM</div><div><div style="font-size:.8rem;font-weight:600">Bilal Mahmood</div><div style="font-size:.68rem;color:var(--tm)">Admin, Greenfield Academy</div></div></div></div>
 <div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Great developer, very professional. Built our inventory web app to spec. Minor bugs fixed same day. I'm a tough grader so 4 stars means a lot haha."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#14B8A6,#5EEAD4);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">ZS</div><div><div style="font-size:.8rem;font-weight:600">Zain Siddiqui</div><div style="font-size:.68rem;color:var(--tm)">Ops Head, TradeMax</div></div></div></div>
-<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan converted my Figma designs into pixel-perfect Flutter app. I'm a designer so I'm picky — he nailed every detail. Rare to find devs who care about design this much."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AN</div><div><div style="font-size:.8rem;font-weight:600">Ayesha Noor</div><div style="font-size:.68rem;color:var(--tm)">UI/UX Designer</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan converted my Figma designs into pixel-perfect Flutter app. I'm a designer so I'm picky — he nailed every detail. Rare find."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AN</div><div><div style="font-size:.8rem;font-weight:600">Ayesha Noor</div><div style="font-size:.68rem;color:var(--tm)">UI/UX Designer</div></div></div></div>
 <div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Previous dev left midway. Shayan took over the messy codebase, cleaned it up, delivered finished product in 10 days. Absolute lifesaver."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">WK</div><div><div style="font-size:.8rem;font-weight:600">Waqas Khalid</div><div style="font-size:.68rem;color:var(--tm)">Product Manager, TechFlow</div></div></div></div>
 </div>
-<div style="display:none;text-align:center;margin-top:.75rem;color:var(--tm);font-size:.7rem" class="sm:hidden" id="swpH"><span class="iconify" data-icon="solar:arrow-left-linear" data-width="12"></span> Swipe to see more <span class="iconify" data-icon="solar:arrow-right-linear" data-width="12"></span></div>
+<div id="swpH" style="text-align:center;margin-top:.75rem;color:var(--tm);font-size:.7rem;display:none"><span class="iconify" data-icon="solar:arrow-left-linear" data-width="12"></span> Swipe to see more <span class="iconify" data-icon="solar:arrow-right-linear" data-width="12"></span></div>
 </div>
 </section>
 <div class="dv" style="position:relative;z-index:1"></div>
 
+<!-- CONTACT -->
 <section id="contact" style="position:relative;z-index:1;padding:5rem 1.25rem">
 <div style="max-width:900px;margin:0 auto;text-align:center">
 <div class="rv"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Get in Touch</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;letter-spacing:-.03em;margin-top:.75rem;line-height:1.1">Have a Project<br>in Mind?</h2><p style="color:var(--ts);font-size:clamp(.85rem,2vw,1rem);line-height:1.7;max-width:460px;margin:1.5rem auto 0">Let's turn your vision into reality. Reach out and let's build something exceptional together.</p></div>
@@ -295,6 +316,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow
 </div>
 </section>
 
+<!-- FOOTER -->
 <footer style="position:relative;z-index:1;border-top:1px solid var(--br);padding:2rem 1.25rem">
 <div style="max-width:1400px;margin:0 auto" class="gf">
 <a href="#" class="logo"><span style="font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--t)">SHAYAN</span><span class="gt" style="font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700">.DEV</span></a>
@@ -321,9 +343,42 @@ var mo=false;
 function tm(){mo=!mo;document.getElementById('mobM').classList.toggle('open',mo);var a=document.getElementById('l1'),b=document.getElementById('l2'),c=document.getElementById('l3');if(mo){a.style.transform='rotate(45deg) translate(4px,4px)';b.style.opacity='0';c.style.transform='rotate(-45deg) translate(4px,-4px)';document.body.style.overflow='hidden'}else{a.style.transform='none';b.style.opacity='1';c.style.transform='none';document.body.style.overflow=''}}
 function cm(){if(mo)tm()}
 
-function om(){document.getElementById('cMod').classList.add('open');document.body.style.overflow='hidden';document.getElementById('cF').style.display='flex';document.getElementById('fOk').style.display='none'}
+function om(){document.getElementById('cMod').classList.add('open');document.body.style.overflow='hidden';document.getElementById('cF').style.display='flex';document.getElementById('fOk').style.display='none';document.getElementById('fErr').style.display='none'}
 function xm(){document.getElementById('cMod').classList.remove('open');document.body.style.overflow=''}
-function hs(e){e.preventDefault();var b=document.getElementById('sB');b.innerHTML='<span class="iconify" data-icon="solar:refresh-bold" data-width="16" style="animation:spin 1s linear infinite"></span> Sending...';b.disabled=true;setTimeout(function(){document.getElementById('cF').style.display='none';document.getElementById('fOk').style.display='block';b.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';b.disabled=false;e.target.reset()},1500)}
+
+// FORMSPREE REAL SUBMISSION
+var cForm=document.getElementById('cF');
+cForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=document.getElementById('sB');
+    var errEl=document.getElementById('fErr');
+    errEl.style.display='none';
+    b.innerHTML='<span class="iconify" data-icon="solar:refresh-bold" data-width="16" style="animation:spin 1s linear infinite"></span> Sending...';
+    b.disabled=true;
+
+    var data=new FormData(cForm);
+    fetch('https://formspree.io/f/mojowwao',{
+        method:'POST',
+        body:data,
+        headers:{'Accept':'application/json'}
+    })
+    .then(function(res){
+        if(res.ok){
+            document.getElementById('cF').style.display='none';
+            document.getElementById('fOk').style.display='block';
+            cForm.reset();
+        }else{
+            errEl.style.display='block';
+            b.disabled=false;
+            b.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';
+        }
+    })
+    .catch(function(){
+        errEl.style.display='block';
+        b.disabled=false;
+        b.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';
+    });
+});
 
 var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('on')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.rv').forEach(function(el){ro.observe(el)});
