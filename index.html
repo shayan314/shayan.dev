@@ -1,749 +1,341 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shayan Dev — Digital Products & Experiences</title>
-    <meta name="description" content="Crafting high-performance mobile apps, web applications, and digital experiences.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: {
-                    inter: ['Inter', 'sans-serif'],
-                    space: ['Space Grotesk', 'sans-serif'],
-                },
-            }
-        }
-    }
-    </script>
-    <style>
-        :root {
-            --bg: #050505; --bg-card: #0D0D0D; --bg-card-hover: #111;
-            --bg-nav: rgba(5,5,5,0.8); --text: #FAFAFA; --text-sec: #A1A1AA;
-            --text-muted: #52525B; --border: rgba(255,255,255,0.06);
-            --border-hover: rgba(255,107,44,0.15); --orb1: rgba(255,107,44,0.08);
-            --orb2: rgba(255,45,120,0.06); --project-overlay: rgba(0,0,0,0.6);
-            --shadow: rgba(0,0,0,0.5); --input-bg: #0D0D0D;
-            --marquee-color: #333; --tag-bg: rgba(255,255,255,0.1);
-            --tag-text: #ccc; --review-bg: #0D0D0D;
-        }
-        .light-mode {
-            --bg: #F8F8F8; --bg-card: #FFFFFF; --bg-card-hover: #F5F5F5;
-            --bg-nav: rgba(248,248,248,0.85); --text: #111111; --text-sec: #6B7280;
-            --text-muted: #9CA3AF; --border: rgba(0,0,0,0.08);
-            --border-hover: rgba(255,107,44,0.3); --orb1: rgba(255,107,44,0.06);
-            --orb2: rgba(255,45,120,0.04); --project-overlay: rgba(255,255,255,0.7);
-            --shadow: rgba(0,0,0,0.08); --input-bg: #F0F0F0;
-            --marquee-color: #D4D4D4; --tag-bg: rgba(0,0,0,0.06);
-            --tag-text: #555; --review-bg: #FFFFFF;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family:'Inter',sans-serif; background:var(--bg); color:var(--text);
-            overflow-x:hidden; -webkit-font-smoothing:antialiased;
-            transition: background 0.4s ease, color 0.4s ease;
-        }
-        ::selection { background:rgba(255,107,44,0.3); color:#fff; }
-        ::-webkit-scrollbar { width:5px; }
-        ::-webkit-scrollbar-track { background:var(--bg); }
-        ::-webkit-scrollbar-thumb { background:#333; border-radius:3px; }
-        .light-mode ::-webkit-scrollbar-thumb { background:#ccc; }
-
-        .noise-overlay { position:fixed; inset:0; z-index:9999; pointer-events:none; opacity:0.025; }
-        .light-mode .noise-overlay { opacity:0.015; }
-        .orb-1 { position:fixed; top:-20%; right:-10%; width:500px; height:500px; background:radial-gradient(circle,var(--orb1) 0%,transparent 70%); border-radius:50%; filter:blur(80px); pointer-events:none; z-index:0; transition:background 0.4s; }
-        .orb-2 { position:fixed; bottom:-20%; left:-10%; width:400px; height:400px; background:radial-gradient(circle,var(--orb2) 0%,transparent 70%); border-radius:50%; filter:blur(100px); pointer-events:none; z-index:0; transition:background 0.4s; }
-
-        .preloader { position:fixed; inset:0; z-index:99999; background:#050505; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1.5rem; transition:opacity 0.6s ease,visibility 0.6s ease; }
-        .preloader.hidden { opacity:0; visibility:hidden; }
-        .preloader-bar { width:100px; height:2px; background:#1a1a1a; border-radius:2px; overflow:hidden; }
-        .preloader-bar::after { content:''; display:block; width:40%; height:100%; background:#FF6B2C; border-radius:2px; animation:preloaderSlide 0.8s ease infinite alternate; }
-        @keyframes preloaderSlide { 0%{transform:translateX(0)} 100%{transform:translateX(200%)} }
-        .preloader-text { font-family:'Space Grotesk',sans-serif; font-size:0.75rem; color:#555; letter-spacing:0.15em; text-transform:uppercase; }
-
-        .gradient-text { background:linear-gradient(135deg,#FF6B2C 0%,#FF2D78 50%,#FF6B2C 100%); background-size:200% auto; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; animation:gradientShift 4s ease infinite; }
-        @keyframes gradientShift { 0%,100%{background-position:0% center} 50%{background-position:200% center} }
-
-        .marquee-track { display:flex; width:max-content; animation:marqueeScroll 25s linear infinite; }
-        .marquee-track:hover { animation-play-state:paused; }
-        @keyframes marqueeScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-
-        .reveal { opacity:0; transform:translateY(35px); transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1); }
-        .reveal.active { opacity:1; transform:translateY(0); }
-        .reveal-d1{transition-delay:.1s} .reveal-d2{transition-delay:.2s} .reveal-d3{transition-delay:.3s} .reveal-d4{transition-delay:.4s} .reveal-d5{transition-delay:.5s}
-
-        .service-card { background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:2rem; position:relative; overflow:hidden; transition:all 0.5s cubic-bezier(0.16,1,0.3,1); }
-        .service-card::before { content:''; position:absolute; inset:0; border-radius:20px; background:linear-gradient(135deg,rgba(255,107,44,0.04) 0%,transparent 50%); opacity:0; transition:opacity 0.5s ease; }
-        .service-card:hover { border-color:var(--border-hover); transform:translateY(-4px); box-shadow:0 20px 60px var(--shadow); }
-        .service-card:hover::before { opacity:1; }
-
-        .project-card { position:relative; border-radius:16px; overflow:hidden; cursor:pointer; }
-        .project-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.7s cubic-bezier(0.16,1,0.3,1),filter 0.7s ease; }
-        .project-card:hover img { transform:scale(1.08); filter:brightness(0.4); }
-        .light-mode .project-card:hover img { filter:brightness(0.6); }
-        .project-card .project-info { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:1.5rem; opacity:0; transform:translateY(15px); transition:all 0.5s cubic-bezier(0.16,1,0.3,1); }
-        .project-card:hover .project-info { opacity:1; transform:translateY(0); }
-        .project-card .project-tag { position:absolute; top:1rem; left:1rem; background:var(--project-overlay); backdrop-filter:blur(8px); padding:0.3rem 0.75rem; border-radius:100px; font-size:0.65rem; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#FF6B2C; opacity:0; transition:opacity 0.4s ease 0.1s; }
-        .project-card:hover .project-tag { opacity:1; }
-        @media(max-width:768px) { .project-card .project-info { opacity:1; transform:translateY(0); } .project-card .project-tag { opacity:1; } .project-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:60%; background:linear-gradient(to top,rgba(0,0,0,0.8),transparent); pointer-events:none; } .light-mode .project-card::after { background:linear-gradient(to top,rgba(0,0,0,0.5),transparent); } }
-
-        .nav-link { position:relative; color:var(--text-sec); font-size:0.78rem; font-weight:500; letter-spacing:0.02em; transition:color 0.3s ease; text-decoration:none; }
-        .nav-link:hover,.nav-link.active { color:var(--text); }
-        .nav-link::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1.5px; background:#FF6B2C; transition:width 0.3s ease; border-radius:2px; }
-        .nav-link:hover::after,.nav-link.active::after { width:100%; }
-
-        .btn-primary { background:#FF6B2C; color:#fff; padding:0.8rem 1.75rem; border-radius:100px; font-size:0.78rem; font-weight:600; letter-spacing:0.02em; transition:all 0.3s ease; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none; }
-        .btn-primary:hover { background:#E55A1B; transform:translateY(-2px); box-shadow:0 10px 40px rgba(255,107,44,0.3); }
-        .btn-outline { background:transparent; color:var(--text); padding:0.8rem 1.75rem; border-radius:100px; font-size:0.78rem; font-weight:500; letter-spacing:0.02em; transition:all 0.3s ease; border:1px solid var(--border); cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none; }
-        .btn-outline:hover { border-color:rgba(255,255,255,0.25); background:rgba(255,255,255,0.03); }
-        .light-mode .btn-outline:hover { border-color:rgba(0,0,0,0.2); background:rgba(0,0,0,0.03); }
-
-        .tech-pill { background:var(--bg-card); border:1px solid var(--border); padding:0.55rem 1.1rem; border-radius:100px; font-size:0.75rem; color:var(--text-sec); font-weight:500; transition:all 0.3s ease; display:inline-flex; align-items:center; gap:0.4rem; }
-        .tech-pill:hover { border-color:rgba(255,107,44,0.3); color:var(--text); }
-
-        .stat-number { font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:700; line-height:1; }
-
-        .mobile-menu { position:fixed; inset:0; z-index:999; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2rem; opacity:0; visibility:hidden; transition:all 0.4s cubic-bezier(0.16,1,0.3,1); }
-        .mobile-menu.open { opacity:1; visibility:visible; }
-        .mobile-menu a { font-family:'Space Grotesk',sans-serif; font-size:1.75rem; font-weight:600; color:var(--text-sec); transition:color 0.3s ease; text-decoration:none; }
-        .mobile-menu a:hover { color:var(--text); }
-
-        .section-divider { width:100%; height:1px; background:linear-gradient(to right,transparent,var(--border),transparent); }
-
-        .bento-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:auto auto; gap:1rem; }
-        .bento-large { grid-column:span 2; grid-row:span 2; }
-        .bento-wide { grid-column:span 2; }
-        .bento-tall { grid-row:span 2; }
-        @media(max-width:1024px) { .bento-grid{grid-template-columns:repeat(2,1fr)} .bento-large{grid-column:span 2;grid-row:span 1} .bento-tall{grid-row:span 1} }
-        @media(max-width:640px) { .bento-grid{grid-template-columns:1fr} .bento-large,.bento-wide{grid-column:span 1} }
-
-        .hero-line { width:0; height:1.5px; background:linear-gradient(to right,#FF6B2C,transparent); animation:lineGrow 1.5s cubic-bezier(0.16,1,0.3,1) 0.8s forwards; }
-        @keyframes lineGrow { to{width:100px} }
-        .hero-reveal { opacity:0; transform:translateY(25px); animation:heroReveal 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .hr1{animation-delay:.3s} .hr2{animation-delay:.5s} .hr3{animation-delay:.7s} .hr4{animation-delay:.9s} .hr5{animation-delay:1.1s}
-        @keyframes heroReveal { to{opacity:1;transform:translateY(0)} }
-
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-        .float-badge { animation:floatBadge 3s ease-in-out infinite; }
-        @keyframes floatBadge { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-
-        /* Theme Toggle */
-        .theme-toggle { width:44px; height:44px; border-radius:12px; border:1px solid var(--border); background:var(--bg-card); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.3s ease; color:var(--text-sec); }
-        .theme-toggle:hover { border-color:var(--border-hover); color:var(--text); transform:rotate(15deg); }
-        .theme-toggle .icon-sun, .theme-toggle .icon-moon { position:absolute; transition:all 0.3s ease; }
-        .theme-toggle .icon-sun { opacity:0; transform:scale(0.5) rotate(-90deg); }
-        .theme-toggle .icon-moon { opacity:1; transform:scale(1) rotate(0deg); }
-        .light-mode .theme-toggle .icon-sun { opacity:1; transform:scale(1) rotate(0deg); }
-        .light-mode .theme-toggle .icon-moon { opacity:0; transform:scale(0.5) rotate(90deg); }
-
-        /* Contact Modal */
-        .modal-overlay { position:fixed; inset:0; z-index:10000; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:1rem; opacity:0; visibility:hidden; transition:all 0.3s ease; }
-        .modal-overlay.open { opacity:1; visibility:visible; }
-        .modal-box { background:var(--bg-card); border:1px solid var(--border); border-radius:24px; padding:2rem; max-width:480px; width:100%; transform:translateY(20px) scale(0.95); transition:all 0.4s cubic-bezier(0.16,1,0.3,1); max-height:90vh; overflow-y:auto; }
-        .modal-overlay.open .modal-box { transform:translateY(0) scale(1); }
-        .modal-input { width:100%; padding:0.85rem 1rem; border-radius:12px; border:1px solid var(--border); background:var(--input-bg); color:var(--text); font-size:0.85rem; font-family:'Inter',sans-serif; outline:none; transition:border-color 0.3s ease; }
-        .modal-input:focus { border-color:#FF6B2C; }
-        .modal-input::placeholder { color:var(--text-muted); }
-
-        /* Reviews */
-        .review-card { background:var(--review-bg); border:1px solid var(--border); border-radius:16px; padding:1.75rem; transition:all 0.4s ease; }
-        .review-card:hover { border-color:var(--border-hover); transform:translateY(-3px); }
-        .review-stars { color:#FBBF24; font-size:0.8rem; letter-spacing:2px; }
-        .review-scroll { display:flex; gap:1rem; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:1rem; scrollbar-width:none; }
-        .review-scroll::-webkit-scrollbar { display:none; }
-        .review-scroll > div { scroll-snap-align:start; min-width:300px; max-width:300px; flex-shrink:0; }
-        @media(min-width:768px) { .review-scroll > div { min-width:350px; max-width:350px; } }
-
-        /* Mobile specific */
-        @media(max-width:640px) {
-            .service-card { padding:1.5rem; border-radius:16px; }
-            .stat-number { font-size:2.2rem !important; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Shayan Dev — Digital Products</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050505;--bc:#0D0D0D;--bn:rgba(5,5,5,.8);--t:#FAFAFA;--ts:#A1A1AA;--tm:#52525B;--br:rgba(255,255,255,.06);--bh:rgba(255,107,44,.15);--in:#0D0D0D;--mc:#333;--tb:rgba(255,255,255,.1);--tt:#ccc;--sh:rgba(0,0,0,.5)}
+.lm{--bg:#F8F8F8;--bc:#FFF;--bn:rgba(248,248,248,.88);--t:#111;--ts:#6B7280;--tm:#9CA3AF;--br:rgba(0,0,0,.08);--bh:rgba(255,107,44,.3);--in:#F0F0F0;--mc:#D4D4D4;--tb:rgba(0,0,0,.06);--tt:#555;--sh:rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .4s,color .4s}
+::selection{background:rgba(255,107,44,.3);color:#fff}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+.lm ::-webkit-scrollbar-thumb{background:#ccc}
+.noise{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.025}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;transition:background .4s}
+.o1{top:-20%;right:-10%;width:500px;height:500px;background:radial-gradient(circle,rgba(255,107,44,.08),transparent 70%)}
+.o2{bottom:-20%;left:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,45,120,.06),transparent 70%);filter:blur(100px)}
+.pl{position:fixed;inset:0;z-index:99999;background:#050505;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;transition:opacity .6s,visibility .6s}
+.pl.hd{opacity:0;visibility:hidden}
+.pb{width:100px;height:2px;background:#1a1a1a;border-radius:2px;overflow:hidden}
+.pb::after{content:'';display:block;width:40%;height:100%;background:#FF6B2C;border-radius:2px;animation:ps .8s ease infinite alternate}
+@keyframes ps{to{transform:translateX(200%)}}
+.gt{background:linear-gradient(135deg,#FF6B2C,#FF2D78 50%,#FF6B2C);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gs 4s ease infinite}
+@keyframes gs{0%,100%{background-position:0% center}50%{background-position:200% center}}
+.mt{display:flex;width:max-content;animation:ms 25s linear infinite}
+.mt:hover{animation-play-state:paused}
+@keyframes ms{to{transform:translateX(-50%)}}
+.rv{opacity:0;transform:translateY(35px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.rv.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+.sc{background:var(--bc);border:1px solid var(--br);border-radius:20px;padding:2rem;position:relative;overflow:hidden;transition:all .5s cubic-bezier(.16,1,.3,1)}
+.sc::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,107,44,.04),transparent 50%);opacity:0;transition:opacity .5s}
+.sc:hover{border-color:var(--bh);transform:translateY(-4px);box-shadow:0 20px 60px var(--sh)}
+.sc:hover::before{opacity:1}
+.pc{position:relative;border-radius:16px;overflow:hidden;cursor:pointer;display:block;text-decoration:none;color:inherit}
+.pc img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.16,1,.3,1),filter .7s}
+.pc:hover img{transform:scale(1.08);filter:brightness(.4)}
+.lm .pc:hover img{filter:brightness(.6)}
+.pc .pi{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;opacity:0;transform:translateY(15px);transition:all .5s cubic-bezier(.16,1,.3,1)}
+.pc:hover .pi{opacity:1;transform:translateY(0)}
+.pc .pt{position:absolute;top:1rem;left:1rem;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);padding:.3rem .75rem;border-radius:100px;font-size:.65rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#FF6B2C;opacity:0;transition:opacity .4s .1s}
+.pc:hover .pt{opacity:1}
+.pc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:65%;background:linear-gradient(to top,rgba(0,0,0,.75),transparent);pointer-events:none;opacity:0;transition:opacity .4s}
+.pc .pi{opacity:0}.pc .pt{opacity:0}
+@media(max-width:768px){.pc::after{opacity:1}.pc .pi{opacity:1;transform:translateY(0)}.pc .pt{opacity:1}}
+@media(min-width:769px){.pc::after{display:none}}
+.nl{position:relative;color:var(--ts);font-size:.78rem;font-weight:500;letter-spacing:.02em;transition:color .3s;text-decoration:none}
+.nl:hover,.nl.on{color:var(--t)}
+.nl::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:#FF6B2C;transition:width .3s;border-radius:2px}
+.nl:hover::after,.nl.on::after{width:100%}
+.bp{background:#FF6B2C;color:#fff;padding:.8rem 1.75rem;border-radius:100px;font-size:.78rem;font-weight:600;letter-spacing:.02em;transition:all .3s;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;white-space:nowrap}
+.bp:hover{background:#E55A1B;transform:translateY(-2px);box-shadow:0 10px 40px rgba(255,107,44,.3)}
+.bo{background:transparent;color:var(--t);padding:.8rem 1.75rem;border-radius:100px;font-size:.78rem;font-weight:500;letter-spacing:.02em;transition:all .3s;border:1px solid var(--br);cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;white-space:nowrap}
+.bo:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.03)}
+.lm .bo:hover{border-color:rgba(0,0,0,.2);background:rgba(0,0,0,.03)}
+.tp{background:var(--bc);border:1px solid var(--br);padding:.55rem 1.1rem;border-radius:100px;font-size:.75rem;color:var(--ts);font-weight:500;transition:all .3s;display:inline-flex;align-items:center;gap:.4rem}
+.tp:hover{border-color:rgba(255,107,44,.3);color:var(--t)}
+.sn{font-family:'Space Grotesk',sans-serif;font-weight:700;line-height:1}
+.mm{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;opacity:0;visibility:hidden;transition:all .4s cubic-bezier(.16,1,.3,1)}
+.mm.open{opacity:1;visibility:visible}
+.mm a{font-family:'Space Grotesk',sans-serif;font-size:1.75rem;font-weight:600;color:var(--ts);transition:color .3s;text-decoration:none}
+.mm a:hover{color:var(--t)}
+.dv{width:100%;height:1px;background:linear-gradient(to right,transparent,var(--br),transparent)}
+.gs{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.gb{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:auto auto;gap:1rem}
+.gb .bl{grid-column:span 2;grid-row:span 2}.gb .bw{grid-column:span 2}.gb .bt{grid-row:span 2}
+.gp{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.gc{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.gf{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem}
+@media(max-width:1024px){.gb{grid-template-columns:repeat(2,1fr)}.gb .bl{grid-column:span 2;grid-row:span 1}.gb .bt{grid-row:span 1}}
+@media(max-width:768px){.gs{grid-template-columns:repeat(2,1fr);gap:1rem}.gp{grid-template-columns:repeat(2,1fr);gap:.75rem}}
+@media(max-width:640px){.gb{grid-template-columns:1fr}.gb .bl,.gb .bw{grid-column:span 1}.gp{grid-template-columns:1fr}.gc{grid-template-columns:1fr}.sc{padding:1.5rem;border-radius:16px}}
+.tt{width:40px;height:40px;border-radius:10px;border:1px solid var(--br);background:var(--bc);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;color:var(--ts);position:relative;flex-shrink:0}
+.tt:hover{border-color:var(--bh);color:var(--t);transform:rotate(15deg)}
+.tt .is,.tt .im{position:absolute;transition:all .3s}
+.tt .is{opacity:0;transform:scale(.5) rotate(-90deg)}.tt .im{opacity:1;transform:scale(1)}
+.lm .tt .is{opacity:1;transform:scale(1)}.lm .tt .im{opacity:0;transform:scale(.5) rotate(90deg)}
+.mbg{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:all .3s}
+.mbg.open{opacity:1;visibility:visible}
+.mbx{background:var(--bc);border:1px solid var(--br);border-radius:24px;padding:1.75rem;max-width:480px;width:100%;transform:translateY(20px) scale(.95);transition:all .4s cubic-bezier(.16,1,.3,1);max-height:90vh;overflow-y:auto}
+.mbg.open .mbx{transform:translateY(0) scale(1)}
+.mi{width:100%;padding:.85rem 1rem;border-radius:12px;border:1px solid var(--br);background:var(--in);color:var(--t);font-size:.85rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .3s}
+.mi:focus{border-color:#FF6B2C}.mi::placeholder{color:var(--tm)}
+.rc{background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;transition:all .4s;flex-shrink:0;scroll-snap-align:start}
+.rc:hover{border-color:var(--bh);transform:translateY(-3px)}
+.rs{color:#FBBF24;font-size:.8rem;letter-spacing:2px}
+.rsc{display:flex;gap:.85rem;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:.75rem;scrollbar-width:none}
+.rsc::-webkit-scrollbar{display:none}
+.rsc>.rc{min-width:300px;max-width:300px}
+@media(min-width:768px){.rsc>.rc{min-width:350px;max-width:350px}}
+.hl{width:0;height:1.5px;background:linear-gradient(to right,#FF6B2C,transparent);animation:hla 1.5s cubic-bezier(.16,1,.3,1) .8s forwards}
+@keyframes hla{to{width:100px}}
+.hr{opacity:0;transform:translateY(25px);animation:hra .9s cubic-bezier(.16,1,.3,1) forwards}
+.h1{animation-delay:.3s}.h2{animation-delay:.5s}.h3{animation-delay:.7s}.h4{animation-delay:.9s}.h5{animation-delay:1.1s}
+@keyframes hra{to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fb{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dn{display:flex;align-items:center;gap:2rem}
+.db{display:inline-flex}
+.hb{display:none}
+@media(max-width:768px){.dn{display:none!important}.db{display:none!important}.hb{display:flex!important}}
+.logo{display:flex;align-items:center;gap:.3rem;white-space:nowrap;text-decoration:none;flex-shrink:0}
+.av{width:7px;height:7px;background:#FF6B2C;border-radius:50%;animation:pulse 2s ease infinite;flex-shrink:0}
+</style>
 </head>
 <body>
+<div class="pl" id="preloader"><div style="font-family:'Space Grotesk',sans-serif;font-size:.75rem;color:#555;letter-spacing:.15em;text-transform:uppercase">SHAYAN.DEV</div><div class="pb"></div></div>
+<svg class="noise" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+<div class="orb o1"></div><div class="orb o2"></div>
 
-<!-- Preloader -->
-<div class="preloader" id="preloader">
-    <div class="preloader-text">SHAYAN.DEV</div>
-    <div class="preloader-bar"></div>
+<div class="mm" id="mobM">
+<a href="#work" onclick="cm()">Work</a>
+<a href="#expertise" onclick="cm()">Expertise</a>
+<a href="#projects" onclick="cm()">Projects</a>
+<a href="#reviews" onclick="cm()">Reviews</a>
+<a href="#contact" onclick="cm()">Contact</a>
+<div style="margin-top:1rem;display:flex;gap:.75rem;align-items:center">
+<button onclick="om();cm()" class="bp" style="font-size:.8rem">Let's Talk</button>
+<button class="tt" onclick="tg()"><span class="is iconify" data-icon="solar:sun-bold" data-width="18"></span><span class="im iconify" data-icon="solar:moon-bold" data-width="18"></span></button>
+</div>
 </div>
 
-<!-- Noise -->
-<svg class="noise-overlay" xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
-
-<!-- Orbs -->
-<div class="orb-1"></div>
-<div class="orb-2"></div>
-
-<!-- Mobile Menu -->
-<div class="mobile-menu" id="mobileMenu">
-    <a href="#work" onclick="closeMobile()">Work</a>
-    <a href="#expertise" onclick="closeMobile()">Expertise</a>
-    <a href="#projects" onclick="closeMobile()">Projects</a>
-    <a href="#reviews" onclick="closeMobile()">Reviews</a>
-    <a href="#contact" onclick="closeMobile()">Contact</a>
-    <div style="margin-top:1rem;display:flex;gap:0.75rem;">
-        <a href="javascript:openModal();closeMobile();" class="btn-primary" style="font-size:0.8rem;">Let's Talk</a>
-        <button class="theme-toggle" onclick="toggleTheme()" style="position:relative;"><span class="icon-sun iconify" data-icon="solar:sun-bold" data-width="18"></span><span class="icon-moon iconify" data-icon="solar:moon-bold" data-width="18"></span></button>
-    </div>
+<div class="mbg" id="cMod" onclick="if(event.target===this)xm()">
+<div class="mbx">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+<div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600">Let's Talk</h3><p style="font-size:.8rem;color:var(--ts);margin-top:.25rem">Share your project details</p></div>
+<button onclick="xm()" style="background:var(--in);border:1px solid var(--br);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ts)"><span class="iconify" data-icon="solar:close-circle-linear" data-width="20"></span></button>
+</div>
+<form id="cF" onsubmit="hs(event)" style="display:flex;flex-direction:column;gap:.8rem">
+<input type="text" class="mi" placeholder="Your Name" required>
+<input type="email" class="mi" placeholder="Your Email" required>
+<input type="text" class="mi" placeholder="Project Type (App / Website / Both)">
+<input type="text" class="mi" placeholder="Budget Range (Optional)">
+<textarea class="mi" placeholder="Tell me about your project..." rows="4" style="resize:none" required></textarea>
+<button type="submit" class="bp" style="width:100%;justify-content:center;padding:1rem;margin-top:.5rem" id="sB"><span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message</button>
+</form>
+<div id="fOk" style="display:none;text-align:center;padding:2rem 0">
+<div style="width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><span class="iconify" data-icon="solar:check-circle-bold" data-width="28" style="color:#10B981"></span></div>
+<h4 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600">Message Sent!</h4>
+<p style="font-size:.82rem;color:var(--ts);margin-top:.5rem;line-height:1.6">Thanks for reaching out! I'll get back to you within 24 hours.</p>
+<button onclick="xm()" class="bo" style="margin-top:1.5rem;padding:.65rem 1.5rem">Close</button>
+</div>
+<div style="display:flex;align-items:center;gap:1rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--br);flex-wrap:wrap">
+<span style="font-size:.7rem;color:var(--tm)">Or reach directly:</span>
+<a href="https://wa.me/923296427396" target="_blank" style="font-size:.75rem;color:#25D366;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.3rem"><span class="iconify" data-icon="mdi:whatsapp" data-width="14"></span> WhatsApp</a>
+<a href="mailto:chshayan314@gmail.com" style="font-size:.75rem;color:#FF6B2C;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:.3rem"><span class="iconify" data-icon="solar:letter-linear" data-width="14"></span> Email</a>
+</div>
+</div>
 </div>
 
-<!-- Contact Modal -->
-<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeModal();">
-    <div class="modal-box">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.75rem;">
-            <div>
-                <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:600;">Let's Talk</h3>
-                <p style="font-size:0.8rem;color:var(--text-sec);margin-top:0.3rem;">Share your project details</p>
-            </div>
-            <button onclick="closeModal()" style="background:var(--input-bg);border:1px solid var(--border);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sec);transition:all 0.3s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-sec)'">
-                <span class="iconify" data-icon="solar:close-circle-linear" data-width="20"></span>
-            </button>
-        </div>
-        <form id="contactForm" onsubmit="handleSubmit(event)" style="display:flex;flex-direction:column;gap:0.85rem;">
-            <input type="text" class="modal-input" placeholder="Your Name" required>
-            <input type="email" class="modal-input" placeholder="Your Email" required>
-            <input type="text" class="modal-input" placeholder="Project Type (App / Website / Both)">
-            <input type="text" class="modal-input" placeholder="Budget Range (Optional)">
-            <textarea class="modal-input" placeholder="Tell me about your project..." rows="4" style="resize:none;" required></textarea>
-            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:1rem;margin-top:0.5rem;" id="submitBtn">
-                <span class="iconify" data-icon="solar:plain-bold" data-width="16"></span>
-                Send Message
-            </button>
-        </form>
-        <div id="formSuccess" style="display:none;text-align:center;padding:2rem 0;">
-            <div style="width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
-                <span class="iconify" data-icon="solar:check-circle-bold" data-width="28" style="color:#10B981;"></span>
-            </div>
-            <h4 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;">Message Sent!</h4>
-            <p style="font-size:0.82rem;color:var(--text-sec);margin-top:0.5rem;line-height:1.6;">Thanks for reaching out! I'll get back to you within 24 hours.</p>
-            <button onclick="closeModal()" class="btn-outline" style="margin-top:1.5rem;padding:0.65rem 1.5rem;">Close</button>
-        </div>
-        <div style="display:flex;align-items:center;gap:1rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);">
-            <span style="font-size:0.7rem;color:var(--text-muted);">Or reach out directly:</span>
-            <a href="https://wa.me/923296427396" target="_blank" style="font-size:0.75rem;color:#25D366;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:0.3rem;">
-                <span class="iconify" data-icon="mdi:whatsapp" data-width="14"></span> WhatsApp
-            </a>
-            <a href="mailto:chshayan314@gmail.com" style="font-size:0.75rem;color:#FF6B2C;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:0.3rem;">
-                <span class="iconify" data-icon="solar:letter-linear" data-width="14"></span> Email
-            </a>
-        </div>
-    </div>
+<nav style="position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--bn);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--br);transition:background .4s">
+<div style="max-width:1400px;margin:0 auto;padding:.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem">
+<a href="#" class="logo"><span style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--t)">SHAYAN</span><span class="gt" style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700">.DEV</span></a>
+<div class="dn"><a href="#work" class="nl">Work</a><a href="#expertise" class="nl">Expertise</a><a href="#projects" class="nl">Projects</a><a href="#reviews" class="nl">Reviews</a><a href="#contact" class="nl">Contact</a></div>
+<div style="display:flex;align-items:center;gap:.6rem">
+<button class="tt" onclick="tg()" aria-label="Toggle theme"><span class="is iconify" data-icon="solar:sun-bold" data-width="18"></span><span class="im iconify" data-icon="solar:moon-bold" data-width="18"></span></button>
+<button onclick="om()" class="bp db" style="padding:.55rem 1.25rem;font-size:.72rem">Let's Talk <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="13"></span></button>
+<button class="hb" onclick="tm()" style="background:none;border:none;color:var(--t);cursor:pointer;flex-direction:column;gap:5px;padding:6px;align-items:center">
+<span id="l1" style="width:20px;height:1.5px;background:var(--t);transition:all .3s;display:block"></span>
+<span id="l2" style="width:14px;height:1.5px;background:var(--t);transition:all .3s;display:block"></span>
+<span id="l3" style="width:20px;height:1.5px;background:var(--t);transition:all .3s;display:block"></span>
+</button>
 </div>
-
-<!-- Navigation -->
-<nav style="position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--bg-nav);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background 0.4s ease;">
-    <div style="max-width:1400px;margin:0 auto;padding:0.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between;">
-        <a href="#" style="text-decoration:none;display:flex;align-items:center;gap:0.3rem;">
-            <span style="font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;color:var(--text);">SHAYAN</span>
-            <span class="gradient-text" style="font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;">.DEV</span>
-        </a>
-        <div style="display:flex;align-items:center;gap:2rem;" class="hidden md:flex">
-            <a href="#work" class="nav-link">Work</a>
-            <a href="#expertise" class="nav-link">Expertise</a>
-            <a href="#projects" class="nav-link">Projects</a>
-            <a href="#reviews" class="nav-link">Reviews</a>
-            <a href="#contact" class="nav-link">Contact</a>
-        </div>
-        <div style="display:flex;align-items:center;gap:0.6rem;">
-            <button class="theme-toggle hidden sm:flex" onclick="toggleTheme()" style="position:relative;" aria-label="Toggle theme">
-                <span class="icon-sun iconify" data-icon="solar:sun-bold" data-width="18"></span>
-                <span class="icon-moon iconify" data-icon="solar:moon-bold" data-width="18"></span>
-            </button>
-            <button onclick="openModal()" class="btn-primary hidden sm:inline-flex" style="padding:0.55rem 1.25rem;font-size:0.72rem;">
-                Let's Talk <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="13"></span>
-            </button>
-            <button onclick="toggleMobile()" style="background:none;border:none;color:var(--text);cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:6px;" id="menuBtn" class="md:hidden">
-                <span style="width:20px;height:1.5px;background:var(--text);transition:all 0.3s ease;display:block;" id="ml1"></span>
-                <span style="width:14px;height:1.5px;background:var(--text);transition:all 0.3s ease;display:block;" id="ml2"></span>
-                <span style="width:20px;height:1.5px;background:var(--text);transition:all 0.3s ease;display:block;" id="ml3"></span>
-            </button>
-        </div>
-    </div>
+</div>
 </nav>
 
-<!-- Hero -->
-<section style="min-height:100vh;display:flex;align-items:center;position:relative;z-index:1;padding:0 1.25rem;">
-    <div style="max-width:1400px;margin:0 auto;width:100%;padding-top:80px;">
-        <div class="hero-reveal hr1" style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.75rem;">
-            <div style="width:7px;height:7px;background:#FF6B2C;border-radius:50%;animation:pulse 2s ease infinite;"></div>
-            <span style="font-size:0.7rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-sec);">Available for Projects</span>
-        </div>
-        <h1 class="hero-reveal hr2" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,8vw,5rem);font-weight:700;line-height:1.05;max-width:850px;letter-spacing:-0.03em;">
-            Crafting Digital<br><span class="gradient-text">Products</span> That<br>Drive Results
-        </h1>
-        <div class="hero-line" style="margin:2rem 0;"></div>
-        <p class="hero-reveal hr3" style="font-size:clamp(0.9rem,2vw,1.05rem);color:var(--text-sec);max-width:460px;line-height:1.7;font-weight:400;">
-            Transforming ideas into high-performance mobile apps, web platforms, and digital experiences using modern, trending technologies.
-        </p>
-        <div class="hero-reveal hr4" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:2rem;align-items:center;">
-            <button onclick="openModal()" class="btn-primary">
-                Let's Talk <span class="iconify" data-icon="solar:arrow-right-linear" data-width="15"></span>
-            </button>
-            <a href="#projects" class="btn-outline">View Work</a>
-        </div>
-        <!-- Floating badge (desktop only) -->
-        <div class="hero-reveal hr5 float-badge hidden lg:block" style="position:absolute;right:2rem;bottom:12%;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.25rem 1.75rem;backdrop-filter:blur(12px);transition:all 0.4s;">
-            <div style="font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:#FF6B2C;" class="counter" data-target="4">0</div>
-            <div style="font-size:0.7rem;color:var(--text-sec);font-weight:500;letter-spacing:0.05em;text-transform:uppercase;">Years of Craft</div>
-        </div>
-    </div>
+<section style="min-height:100vh;display:flex;align-items:center;position:relative;z-index:1;padding:0 1.25rem">
+<div style="max-width:1400px;margin:0 auto;width:100%;padding-top:80px">
+<div class="hr h1" style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.75rem"><div class="av"></div><span style="font-size:.7rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--ts)">Available for Projects</span></div>
+<h1 class="hr h2" style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,8vw,5rem);font-weight:700;line-height:1.05;max-width:850px;letter-spacing:-.03em">Crafting Digital<br><span class="gt">Products</span> That<br>Drive Results</h1>
+<div class="hl" style="margin:2rem 0"></div>
+<p class="hr h3" style="font-size:clamp(.88rem,2vw,1.05rem);color:var(--ts);max-width:460px;line-height:1.7">Transforming ideas into high-performance mobile apps, web platforms, and digital experiences using modern, trending technologies.</p>
+<div class="hr h4" style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem;align-items:center">
+<button onclick="om()" class="bp">Let's Talk <span class="iconify" data-icon="solar:arrow-right-linear" data-width="15"></span></button>
+<a href="#projects" class="bo">View Work</a>
+</div>
+<div class="hr h5" id="fb" style="position:absolute;right:1.5rem;bottom:12%;background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.25rem 1.75rem;backdrop-filter:blur(12px);transition:all .4s;display:none;animation:fb 3s ease-in-out infinite">
+<div style="font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:#FF6B2C" class="ctr" data-target="4">0</div>
+<div style="font-size:.7rem;color:var(--ts);font-weight:500;letter-spacing:.05em;text-transform:uppercase">Years of Craft</div>
+</div>
+</div>
 </section>
 
-<!-- Marquee -->
-<div style="position:relative;z-index:1;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;overflow:hidden;">
-    <div class="marquee-track">
-        <span style="display:flex;align-items:center;gap:2.5rem;padding-right:2.5rem;font-family:'Space Grotesk',sans-serif;font-size:0.8rem;font-weight:500;color:var(--marquee-color);text-transform:uppercase;letter-spacing:0.1em;white-space:nowrap;">
-            <span>FLUTTER</span><span style="color:#FF6B2C;">✦</span><span>DART</span><span style="color:#FF6B2C;">✦</span><span>REACT</span><span style="color:#FF6B2C;">✦</span><span>NEXT.JS</span><span style="color:#FF6B2C;">✦</span><span>FIREBASE</span><span style="color:#FF6B2C;">✦</span><span>NODE.JS</span><span style="color:#FF6B2C;">✦</span><span>MONGODB</span><span style="color:#FF6B2C;">✦</span><span>TYPESCRIPT</span><span style="color:#FF6B2C;">✦</span><span>TAILWIND</span><span style="color:#FF6B2C;">✦</span><span>FIGMA</span><span style="color:#FF6B2C;">✦</span><span>FULL STACK</span><span style="color:#FF6B2C;">✦</span>
-        </span>
-        <span style="display:flex;align-items:center;gap:2.5rem;padding-right:2.5rem;font-family:'Space Grotesk',sans-serif;font-size:0.8rem;font-weight:500;color:var(--marquee-color);text-transform:uppercase;letter-spacing:0.1em;white-space:nowrap;">
-            <span>FLUTTER</span><span style="color:#FF6B2C;">✦</span><span>DART</span><span style="color:#FF6B2C;">✦</span><span>REACT</span><span style="color:#FF6B2C;">✦</span><span>NEXT.JS</span><span style="color:#FF6B2C;">✦</span><span>FIREBASE</span><span style="color:#FF6B2C;">✦</span><span>NODE.JS</span><span style="color:#FF6B2C;">✦</span><span>MONGODB</span><span style="color:#FF6B2C;">✦</span><span>TYPESCRIPT</span><span style="color:#FF6B2C;">✦</span><span>TAILWIND</span><span style="color:#FF6B2C;">✦</span><span>FIGMA</span><span style="color:#FF6B2C;">✦</span><span>FULL STACK</span><span style="color:#FF6B2C;">✦</span>
-        </span>
-    </div>
+<div style="position:relative;z-index:1;border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:1rem 0;overflow:hidden">
+<div class="mt">
+<span style="display:flex;align-items:center;gap:2.5rem;padding-right:2.5rem;font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:500;color:var(--mc);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap">FLUTTER<span style="color:#FF6B2C">✦</span>DART<span style="color:#FF6B2C">✦</span>REACT<span style="color:#FF6B2C">✦</span>NEXT.JS<span style="color:#FF6B2C">✦</span>FIREBASE<span style="color:#FF6B2C">✦</span>NODE.JS<span style="color:#FF6B2C">✦</span>MONGODB<span style="color:#FF6B2C">✦</span>TYPESCRIPT<span style="color:#FF6B2C">✦</span>TAILWIND<span style="color:#FF6B2C">✦</span>FIGMA<span style="color:#FF6B2C">✦</span>FULL STACK<span style="color:#FF6B2C">✦</span></span>
+<span style="display:flex;align-items:center;gap:2.5rem;padding-right:2.5rem;font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:500;color:var(--mc);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap">FLUTTER<span style="color:#FF6B2C">✦</span>DART<span style="color:#FF6B2C">✦</span>REACT<span style="color:#FF6B2C">✦</span>NEXT.JS<span style="color:#FF6B2C">✦</span>FIREBASE<span style="color:#FF6B2C">✦</span>NODE.JS<span style="color:#FF6B2C">✦</span>MONGODB<span style="color:#FF6B2C">✦</span>TYPESCRIPT<span style="color:#FF6B2C">✦</span>TAILWIND<span style="color:#FF6B2C">✦</span>FIGMA<span style="color:#FF6B2C">✦</span>FULL STACK<span style="color:#FF6B2C">✦</span></span>
+</div>
 </div>
 
-<!-- Stats -->
-<section id="work" style="position:relative;z-index:1;padding:4.5rem 1.25rem;">
-    <div style="max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;" class="grid grid-cols-2 lg:grid-cols-4">
-        <div class="reveal" style="text-align:center;padding:1.5rem 0;">
-            <div class="stat-number gradient-text counter" data-target="4">0</div>
-            <div style="font-size:0.72rem;color:var(--text-sec);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin-top:0.6rem;">Years Experience</div>
-        </div>
-        <div class="reveal reveal-d1" style="text-align:center;padding:1.5rem 0;">
-            <div class="stat-number gradient-text"><span class="counter" data-target="50">0</span>+</div>
-            <div style="font-size:0.72rem;color:var(--text-sec);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin-top:0.6rem;">Projects Delivered</div>
-        </div>
-        <div class="reveal reveal-d2" style="text-align:center;padding:1.5rem 0;">
-            <div class="stat-number gradient-text"><span class="counter" data-target="30">0</span>+</div>
-            <div style="font-size:0.72rem;color:var(--text-sec);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin-top:0.6rem;">Happy Clients</div>
-        </div>
-        <div class="reveal reveal-d3" style="text-align:center;padding:1.5rem 0;">
-            <div class="stat-number gradient-text"><span class="counter" data-target="99">0</span>%</div>
-            <div style="font-size:0.72rem;color:var(--text-sec);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin-top:0.6rem;">Satisfaction Rate</div>
-        </div>
-    </div>
+<section id="work" style="position:relative;z-index:1;padding:4rem 1.25rem">
+<div style="max-width:1400px;margin:0 auto" class="gs">
+<div class="rv" style="text-align:center;padding:1.25rem 0"><div class="sn gt" style="font-size:clamp(2rem,5vw,3.5rem)"><span class="ctr" data-target="4">0</span></div><div style="font-size:.7rem;color:var(--ts);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-top:.6rem">Years Experience</div></div>
+<div class="rv d1" style="text-align:center;padding:1.25rem 0"><div class="sn gt" style="font-size:clamp(2rem,5vw,3.5rem)"><span class="ctr" data-target="50">0</span>+</div><div style="font-size:.7rem;color:var(--ts);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-top:.6rem">Projects Delivered</div></div>
+<div class="rv d2" style="text-align:center;padding:1.25rem 0"><div class="sn gt" style="font-size:clamp(2rem,5vw,3.5rem)"><span class="ctr" data-target="30">0</span>+</div><div style="font-size:.7rem;color:var(--ts);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-top:.6rem">Happy Clients</div></div>
+<div class="rv d3" style="text-align:center;padding:1.25rem 0"><div class="sn gt" style="font-size:clamp(2rem,5vw,3.5rem)"><span class="ctr" data-target="99">0</span>%</div><div style="font-size:.7rem;color:var(--ts);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-top:.6rem">Satisfaction Rate</div></div>
+</div>
+</section>
+<div class="dv" style="position:relative;z-index:1"></div>
+
+<section id="expertise" style="position:relative;z-index:1;padding:4rem 1.25rem">
+<div style="max-width:1400px;margin:0 auto">
+<div class="rv" style="margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">What We Do</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">Expertise Built for<br>Modern Demands</h2></div>
+<div class="gb">
+<div class="bl sc rv" style="display:flex;flex-direction:column;justify-content:space-between">
+<div><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,107,44,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:smartphone-2-bold-duotone" data-width="22" style="color:#FF6B2C"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:600;margin-bottom:.75rem">Mobile App Development</h3><p style="color:var(--ts);font-size:.85rem;line-height:1.7;max-width:380px">High-performance, cross-platform mobile apps built with Flutter — native-like experiences on iOS & Android from a single codebase.</p></div>
+<div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.75rem"><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Flutter</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Dart</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">Firebase</span><span style="font-size:.65rem;padding:.25rem .65rem;border-radius:100px;background:var(--tb);color:var(--tt)">REST APIs</span></div>
+</div>
+<div class="bw sc rv d1"><div style="width:44px;height:44px;border-radius:12px;background:rgba(255,45,120,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:monitor-bold-duotone" data-width="22" style="color:#FF2D78"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:.6rem">Web App Development</h3><p style="color:var(--ts);font-size:.82rem;line-height:1.7">Scalable, responsive web apps using React & Next.js — built for speed and engagement.</p></div>
+<div class="sc rv d2"><div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:code-square-bold-duotone" data-width="22" style="color:#6366F1"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:.6rem">Full Stack</h3><p style="color:var(--ts);font-size:.82rem;line-height:1.7">End-to-end — from database design to deployment.</p></div>
+<div class="sc rv d3"><div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem"><span class="iconify" data-icon="solar:pallete-2-bold-duotone" data-width="22" style="color:#10B981"></span></div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:.6rem">UI/UX Design</h3><p style="color:var(--ts);font-size:.82rem;line-height:1.7">Clean interfaces designed for conversion and usability.</p></div>
+</div>
+</div>
+</section>
+<div class="dv" style="position:relative;z-index:1"></div>
+
+<section id="projects" style="position:relative;z-index:1;padding:4rem 1.25rem">
+<div style="max-width:1400px;margin:0 auto">
+<div class="rv" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;gap:1rem">
+<div><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Selected Work</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">Projects That<br>Speak Volumes</h2></div>
+<a href="https://github.com/shayan314" target="_blank" class="bo" style="font-size:.72rem;padding:.55rem 1.25rem">GitHub <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="13"></span></a>
+</div>
+<div class="gp">
+<a href="https://github.com/flutter/flutter/tree/master/examples" target="_blank" class="pc rv" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/ecomshop22/800/600" alt="LuxeCart" loading="lazy"><span class="pt">Mobile App</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">LuxeCart</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">Premium e-commerce app with checkout, tracking & recommendations.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Flutter</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Firebase</span></div></div></a>
+<a href="https://github.com/flutter/samples/tree/main/veggieseasons" target="_blank" class="pc rv d1" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/fitapp99/800/600" alt="FitPulse" loading="lazy"><span class="pt">Mobile App</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">FitPulse</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">AI-powered fitness tracker with workout plans & analytics.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Flutter</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Dart</span></div></div></a>
+<a href="https://github.com/vercel/next.js/tree/canary/examples/dashboard" target="_blank" class="pc rv d2" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/dashcloud/800/600" alt="CloudDash" loading="lazy"><span class="pt">Web App</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">CloudDash</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">SaaS analytics dashboard with real-time data viz & reporting.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Next.js</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Node.js</span></div></div></a>
+<a href="https://github.com/vercel/next.js/tree/canary/examples/ecommerce" target="_blank" class="pc rv" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/realestate44/800/600" alt="EstatePro" loading="lazy"><span class="pt">Full Stack</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">EstatePro</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">Real estate platform with virtual tours & lead management.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Next.js</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">MongoDB</span></div></div></a>
+<a href="https://github.com/flutter/samples/tree/main/platform_design" target="_blank" class="pc rv d1" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/fooddel55/800/600" alt="QuickBite" loading="lazy"><span class="pt">Mobile + Web</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">QuickBite</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">Food delivery with real-time tracking & payment integration.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Flutter</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Firebase</span></div></div></a>
+<a href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter" target="_blank" class="pc rv d2" style="aspect-ratio:4/3"><img src="https://picsum.photos/seed/brandweb66/800/600" alt="NovaBrand" loading="lazy"><span class="pt">Website</span><div class="pi"><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600">NovaBrand</h3><p style="color:#bbb;font-size:.78rem;margin-top:.4rem;line-height:1.5">High-converting business site with animations & SEO.</p><div style="display:flex;gap:.4rem;margin-top:.75rem"><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Next.js</span><span style="font-size:.6rem;padding:.2rem .55rem;border-radius:100px;background:rgba(255,255,255,.12);color:#ddd">Tailwind</span></div></div></a>
+</div>
+</div>
+</section>
+<div class="dv" style="position:relative;z-index:1"></div>
+
+<section style="position:relative;z-index:1;padding:4rem 1.25rem">
+<div style="max-width:1400px;margin:0 auto">
+<div class="rv" style="text-align:center;margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Tech Stack</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem">Tools & Technologies</h2></div>
+<div class="rv d1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem">
+<span class="tp"><span class="iconify" data-icon="logos:flutter" data-width="15"></span> Flutter</span>
+<span class="tp"><span class="iconify" data-icon="logos:dart" data-width="15"></span> Dart</span>
+<span class="tp"><span class="iconify" data-icon="logos:react" data-width="15"></span> React</span>
+<span class="tp"><span class="iconify" data-icon="logos:nextjs-icon" data-width="15"></span> Next.js</span>
+<span class="tp"><span class="iconify" data-icon="logos:nodejs-icon" data-width="15"></span> Node.js</span>
+<span class="tp"><span class="iconify" data-icon="logos:mongodb-icon" data-width="15"></span> MongoDB</span>
+<span class="tp"><span class="iconify" data-icon="logos:firebase" data-width="15"></span> Firebase</span>
+<span class="tp"><span class="iconify" data-icon="logos:typescript-icon" data-width="15"></span> TypeScript</span>
+<span class="tp"><span class="iconify" data-icon="logos:tailwindcss-icon" data-width="15"></span> Tailwind</span>
+<span class="tp"><span class="iconify" data-icon="logos:figma" data-width="10"></span> Figma</span>
+<span class="tp"><span class="iconify" data-icon="logos:git-icon" data-width="15"></span> Git</span>
+<span class="tp"><span class="iconify" data-icon="logos:github-icon" data-width="15"></span> GitHub</span>
+</div>
+</div>
+</section>
+<div class="dv" style="position:relative;z-index:1"></div>
+
+<section id="reviews" style="position:relative;z-index:1;padding:4rem 1.25rem">
+<div style="max-width:1400px;margin:0 auto">
+<div class="rv" style="margin-bottom:2.5rem"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Client Reviews</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;margin-top:.75rem;line-height:1.15">What People Say</h2></div>
+<div class="rsc rv d1">
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan built our entire e-commerce app from scratch. Quality was way beyond what I expected. App runs super smooth on both iOS and Android!"</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FF2D78);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AK</div><div><div style="font-size:.8rem;font-weight:600">Ahmed Khan</div><div style="font-size:.68rem;color:var(--tm)">CEO, LuxeCart</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"We needed a fitness app with complex tracking and Shayan delivered perfectly. Communication was on point — always kept me updated on progress."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#818CF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">SR</div><div><div style="font-size:.8rem;font-weight:600">Sarah Rodriguez</div><div style="font-size:.68rem;color:var(--tm)">Founder, FitPulse</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"The SaaS dashboard Shayan created is insane. Clean UI, real-time data, super fast. Team productivity went up significantly after switching to it."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10B981,#34D399);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">MJ</div><div><div style="font-size:.8rem;font-weight:600">Michael James</div><div style="font-size:.68rem;color:var(--tm)">CTO, CloudDash</div></div></div></div>
+<div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Solid work on our real estate platform. Map integration and filtering work flawlessly. Initial delivery was a few days late but final result made up for it."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">FA</div><div><div style="font-size:.8rem;font-weight:600">Fatima Ali</div><div style="font-size:.68rem;color:var(--tm)">Manager, EstatePro</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan understood our food delivery concept immediately. Real-time order tracking is a game changer. Our customers love it!"</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EF4444,#F87171);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">HR</div><div><div style="font-size:.8rem;font-weight:600">Hassan Raza</div><div style="font-size:.68rem;color:var(--tm)">Owner, QuickBite</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Our old website was embarrassing. Shayan completely rebuilt it — now it looks like a Fortune 500 company site. SEO improved drastically. Best investment this year."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#F472B6);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">LN</div><div><div style="font-size:.8rem;font-weight:600">Lisa Nguyen</div><div style="font-size:.68rem;color:var(--tm)">Director, NovaBrand</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"I've worked with 5-6 devs before and Shayan is genuinely different. He thinks about UX. My app rating went from 3.2 to 4.8 after his redesign."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#38BDF8);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">OT</div><div><div style="font-size:.8rem;font-weight:600">Omar Tariq</div><div style="font-size:.68rem;color:var(--tm)">App Founder</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan delivered our school management system in 3 weeks. Handles 2000+ students, attendance, grades, fees — hasn't crashed once."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">BM</div><div><div style="font-size:.8rem;font-weight:600">Bilal Mahmood</div><div style="font-size:.68rem;color:var(--tm)">Admin, Greenfield Academy</div></div></div></div>
+<div class="rc"><div class="rs">★★★★☆</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Great developer, very professional. Built our inventory web app to spec. Minor bugs fixed same day. I'm a tough grader so 4 stars means a lot haha."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#14B8A6,#5EEAD4);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">ZS</div><div><div style="font-size:.8rem;font-weight:600">Zain Siddiqui</div><div style="font-size:.68rem;color:var(--tm)">Ops Head, TradeMax</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Shayan converted my Figma designs into pixel-perfect Flutter app. I'm a designer so I'm picky — he nailed every detail. Rare to find devs who care about design this much."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">AN</div><div><div style="font-size:.8rem;font-weight:600">Ayesha Noor</div><div style="font-size:.68rem;color:var(--tm)">UI/UX Designer</div></div></div></div>
+<div class="rc"><div class="rs">★★★★★</div><p style="font-size:.83rem;color:var(--ts);line-height:1.7;margin-top:.85rem">"Previous dev left midway. Shayan took over the messy codebase, cleaned it up, delivered finished product in 10 days. Absolute lifesaver."</p><div style="display:flex;align-items:center;gap:.75rem;margin-top:1.15rem"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff">WK</div><div><div style="font-size:.8rem;font-weight:600">Waqas Khalid</div><div style="font-size:.68rem;color:var(--tm)">Product Manager, TechFlow</div></div></div></div>
+</div>
+<div style="display:none;text-align:center;margin-top:.75rem;color:var(--tm);font-size:.7rem" class="sm:hidden" id="swpH"><span class="iconify" data-icon="solar:arrow-left-linear" data-width="12"></span> Swipe to see more <span class="iconify" data-icon="solar:arrow-right-linear" data-width="12"></span></div>
+</div>
+</section>
+<div class="dv" style="position:relative;z-index:1"></div>
+
+<section id="contact" style="position:relative;z-index:1;padding:5rem 1.25rem">
+<div style="max-width:900px;margin:0 auto;text-align:center">
+<div class="rv"><span style="font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#FF6B2C">Get in Touch</span><h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;letter-spacing:-.03em;margin-top:.75rem;line-height:1.1">Have a Project<br>in Mind?</h2><p style="color:var(--ts);font-size:clamp(.85rem,2vw,1rem);line-height:1.7;max-width:460px;margin:1.5rem auto 0">Let's turn your vision into reality. Reach out and let's build something exceptional together.</p></div>
+<div class="rv d1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem;margin-top:2.5rem">
+<button onclick="om()" class="bp"><span class="iconify" data-icon="solar:letter-bold" data-width="15"></span> Send a Message</button>
+<a href="https://wa.me/923296427396" target="_blank" class="bo"><span class="iconify" data-icon="mdi:whatsapp" data-width="16" style="color:#25D366"></span> WhatsApp</a>
+</div>
+<div class="rv d2 gc" style="margin-top:3rem">
+<a href="mailto:chshayan314@gmail.com" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:letter-bold-duotone" data-width="24" style="color:#FF6B2C"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">Email</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem;word-break:break-all">chshayan314@gmail.com</div></a>
+<a href="https://wa.me/923296427396" target="_blank" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:phone-calling-bold-duotone" data-width="24" style="color:#10B981"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">WhatsApp</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem">+92 329 6427396</div></a>
+<a href="https://github.com/shayan314" target="_blank" style="background:var(--bc);border:1px solid var(--br);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all .3s;display:block" onmouseover="this.style.borderColor='var(--bh)'" onmouseout="this.style.borderColor='var(--br)'"><span class="iconify" data-icon="solar:code-bold-duotone" data-width="24" style="color:#6366F1"></span><div style="font-size:.65rem;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-top:.75rem">GitHub</div><div style="font-size:.78rem;color:var(--t);margin-top:.25rem">@shayan314</div></a>
+</div>
+</div>
 </section>
 
-<div class="section-divider" style="position:relative;z-index:1;"></div>
-
-<!-- Expertise -->
-<section id="expertise" style="position:relative;z-index:1;padding:4.5rem 1.25rem;">
-    <div style="max-width:1400px;margin:0 auto;">
-        <div class="reveal" style="margin-bottom:3rem;">
-            <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#FF6B2C;">What We Do</span>
-            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-0.02em;margin-top:0.75rem;line-height:1.15;">Expertise Built for<br>Modern Demands</h2>
-        </div>
-        <div class="bento-grid">
-            <div class="bento-large service-card reveal" style="display:flex;flex-direction:column;justify-content:space-between;">
-                <div>
-                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,107,44,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
-                        <span class="iconify" data-icon="solar:smartphone-2-bold-duotone" data-width="22" style="color:#FF6B2C;"></span>
-                    </div>
-                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:600;margin-bottom:0.75rem;">Mobile App Development</h3>
-                    <p style="color:var(--text-sec);font-size:0.85rem;line-height:1.7;max-width:380px;">High-performance, cross-platform mobile applications built with Flutter — native-like experiences on iOS & Android from a single codebase.</p>
-                </div>
-                <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1.75rem;">
-                    <span style="font-size:0.65rem;padding:0.25rem 0.65rem;border-radius:100px;background:var(--tag-bg);color:var(--tag-text);">Flutter</span>
-                    <span style="font-size:0.65rem;padding:0.25rem 0.65rem;border-radius:100px;background:var(--tag-bg);color:var(--tag-text);">Dart</span>
-                    <span style="font-size:0.65rem;padding:0.25rem 0.65rem;border-radius:100px;background:var(--tag-bg);color:var(--tag-text);">Firebase</span>
-                    <span style="font-size:0.65rem;padding:0.25rem 0.65rem;border-radius:100px;background:var(--tag-bg);color:var(--tag-text);">REST APIs</span>
-                </div>
-            </div>
-            <div class="bento-wide service-card reveal reveal-d1">
-                <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,45,120,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
-                    <span class="iconify" data-icon="solar:monitor-bold-duotone" data-width="22" style="color:#FF2D78;"></span>
-                </div>
-                <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:0.6rem;">Web App Development</h3>
-                <p style="color:var(--text-sec);font-size:0.82rem;line-height:1.7;">Scalable, responsive web apps using React & Next.js — built for speed and engagement.</p>
-            </div>
-            <div class="service-card reveal reveal-d2">
-                <div style="width:44px;height:44px;border-radius:12px;background:rgba(99,102,241,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
-                    <span class="iconify" data-icon="solar:code-square-bold-duotone" data-width="22" style="color:#6366F1;"></span>
-                </div>
-                <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:0.6rem;">Full Stack</h3>
-                <p style="color:var(--text-sec);font-size:0.82rem;line-height:1.7;">End-to-end — from database to deployment.</p>
-            </div>
-            <div class="service-card reveal reveal-d3">
-                <div style="width:44px;height:44px;border-radius:12px;background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;">
-                    <span class="iconify" data-icon="solar:pallete-2-bold-duotone" data-width="22" style="color:#10B981;"></span>
-                </div>
-                <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:0.6rem;">UI/UX Design</h3>
-                <p style="color:var(--text-sec);font-size:0.82rem;line-height:1.7;">Clean interfaces designed for conversion.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<div class="section-divider" style="position:relative;z-index:1;"></div>
-
-<!-- Projects -->
-<section id="projects" style="position:relative;z-index:1;padding:4.5rem 1.25rem;">
-    <div style="max-width:1400px;margin:0 auto;">
-        <div class="reveal" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;gap:1rem;">
-            <div>
-                <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#FF6B2C;">Selected Work</span>
-                <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-0.02em;margin-top:0.75rem;line-height:1.15;">Projects That<br>Speak Volumes</h2>
-            </div>
-            <a href="https://github.com/shayan314" target="_blank" class="btn-outline" style="font-size:0.72rem;padding:0.55rem 1.25rem;">
-                GitHub <span class="iconify" data-icon="solar:arrow-right-up-linear" data-width="13"></span>
-            </a>
-        </div>
-
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-
-            <a href="https://github.com/flutter/flutter/tree/master/examples" target="_blank" class="project-card reveal" style="aspect-ratio:4/3;text-decoration:none;color:inherit;display:block;">
-                <img src="https://picsum.photos/seed/ecomshop/800/600" alt="LuxeCart" loading="lazy">
-                <span class="project-tag">Mobile App</span>
-                <div class="project-info">
-                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600;">LuxeCart</h3>
-                    <p style="color:#bbb;font-size:0.78rem;margin-top:0.4rem;line-height:1.5;">Premium e-commerce app with seamless checkout, real-time tracking & personalized recommendations.</p>
-                    <div style="display:flex;gap:0.4rem;margin-top:0.75rem;flex-wrap:wrap;">
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Flutter</span>
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Firebase</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/flutter/samples/tree/main/veggieseasons" target="_blank" class="project-card reveal reveal-d1" style="aspect-ratio:4/3;text-decoration:none;color:inherit;display:block;">
-                <img src="https://picsum.photos/seed/fitnessapp/800/600" alt="FitPulse" loading="lazy">
-                <span class="project-tag">Mobile App</span>
-                <div class="project-info">
-                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600;">FitPulse</h3>
-                    <p style="color:#bbb;font-size:0.78rem;margin-top:0.4rem;line-height:1.5;">AI-powered fitness tracker with workout plans, nutrition logging & progress analytics.</p>
-                    <div style="display:flex;gap:0.4rem;margin-top:0.75rem;flex-wrap:wrap;">
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Flutter</span>
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Dart</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/vercel/next.js/tree/canary/examples/dashboard" target="_blank" class="project-card reveal reveal-d2" style="aspect-ratio:4/3;text-decoration:none;color:inherit;display:block;">
-                <img src="https://picsum.photos/seed/dashboardui/800/600" alt="CloudDash" loading="lazy">
-                <span class="project-tag">Web App</span>
-                <div class="project-info">
-                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600;">CloudDash</h3>
-                    <p style="color:#bbb;font-size:0.78rem;margin-top:0.4rem;line-height:1.5;">SaaS analytics dashboard with real-time data viz, team management & automated reporting.</p>
-                    <div style="display:flex;gap:0.4rem;margin-top:0.75rem;flex-wrap:wrap;">
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Next.js</span>
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Node.js</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/vercel/next.js/tree/canary/examples/ecommerce" target="_blank" class="project-card reveal" style="aspect-ratio:4/3;text-decoration:none;color:inherit;display:block;">
-                <img src="https://picsum.photos/seed/realestate/800/600" alt="EstatePro" loading="lazy">
-                <span class="project-tag">Full Stack</span>
-                <div class="project-info">
-                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600;">EstatePro</h3>
-                    <p style="color:#bbb;font-size:0.78rem;margin-top:0.4rem;line-height:1.5;">Real estate platform with listings, virtual tours, map integration & lead management.</p>
-                    <div style="display:flex;gap:0.4rem;margin-top:0.75rem;flex-wrap:wrap;">
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Next.js</span>
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">MongoDB</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/flutter/samples/tree/main/platform_design" target="_blank" class="project-card reveal reveal-d1" style="aspect-ratio:4/3;text-decoration:none;color:inherit;display:block;">
-                <img src="https://picsum.photos/seed/foodapp/800/600" alt="QuickBite" loading="lazy">
-                <span class="project-tag">Mobile + Web</span>
-                <div class="project-info">
-                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600;">QuickBite</h3>
-                    <p style="color:#bbb;font-size:0.78rem;margin-top:0.4rem;line-height:1.5;">Food delivery platform with real-time order tracking, restaurant management & payments.</p>
-                    <div style="display:flex;gap:0.4rem;margin-top:0.75rem;flex-wrap:wrap;">
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Flutter</span>
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Firebase</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter" target="_blank" class="project-card reveal reveal-d2" style="aspect-ratio:4/3;text-decoration:none;color:inherit;display:block;">
-                <img src="https://picsum.photos/seed/brandweb/800/600" alt="NovaBrand" loading="lazy">
-                <span class="project-tag">Website</span>
-                <div class="project-info">
-                    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600;">NovaBrand</h3>
-                    <p style="color:#bbb;font-size:0.78rem;margin-top:0.4rem;line-height:1.5;">High-converting business website with smooth animations, CMS & SEO optimization.</p>
-                    <div style="display:flex;gap:0.4rem;margin-top:0.75rem;flex-wrap:wrap;">
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Next.js</span>
-                        <span style="font-size:0.6rem;padding:0.2rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.12);color:#ddd;">Tailwind</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
-
-<div class="section-divider" style="position:relative;z-index:1;"></div>
-
-<!-- Tech Stack -->
-<section style="position:relative;z-index:1;padding:4.5rem 1.25rem;">
-    <div style="max-width:1400px;margin:0 auto;">
-        <div class="reveal" style="text-align:center;margin-bottom:2.5rem;">
-            <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#FF6B2C;">Tech Stack</span>
-            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;letter-spacing:-0.02em;margin-top:0.75rem;">Tools & Technologies</h2>
-        </div>
-        <div class="reveal reveal-d1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.6rem;">
-            <span class="tech-pill"><span class="iconify" data-icon="logos:flutter" data-width="15"></span> Flutter</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:dart" data-width="15"></span> Dart</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:react" data-width="15"></span> React</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:nextjs-icon" data-width="15"></span> Next.js</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:nodejs-icon" data-width="15"></span> Node.js</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:mongodb-icon" data-width="15"></span> MongoDB</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:firebase" data-width="15"></span> Firebase</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:typescript-icon" data-width="15"></span> TypeScript</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:tailwindcss-icon" data-width="15"></span> Tailwind</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:figma" data-width="10"></span> Figma</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:git-icon" data-width="15"></span> Git</span>
-            <span class="tech-pill"><span class="iconify" data-icon="logos:github-icon" data-width="15"></span> GitHub</span>
-        </div>
-    </div>
-</section>
-
-<div class="section-divider" style="position:relative;z-index:1;"></div>
-
-<!-- Reviews -->
-<section id="reviews" style="position:relative;z-index:1;padding:4.5rem 1.25rem;">
-    <div style="max-width:1400px;margin:0 auto;">
-        <div class="reveal" style="margin-bottom:3rem;">
-            <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#FF6B2C;">Client Reviews</span>
-            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:700;letter-spacing:-0.02em;margin-top:0.75rem;line-height:1.15;">What People Say</h2>
-        </div>
-        <div class="review-scroll reveal reveal-d1">
-
-            <div class="review-card">
-                <div class="review-stars">★★★★★</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"Shayan built our entire e-commerce app from scratch. The quality was honestly way beyond what I expected at this price point. App runs super smooth on both iOS and Android. Highly recommend!"</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FF2D78);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">AK</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Ahmed Khan</div><div style="font-size:0.7rem;color:var(--text-muted);">CEO, LuxeCart</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★★</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"We needed a fitness app with complex tracking features and Shayan delivered it perfectly. Communication was on point throughout — always updated me on progress. Will definitely work together again."</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6366F1,#818CF8);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">SR</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Sarah Rodriguez</div><div style="font-size:0.7rem;color:var(--text-muted);">Founder, FitPulse</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★★</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"The SaaS dashboard Shayan created for us is insane. Clean UI, real-time data, super fast. Our team productivity went up significantly after we switched to it. 10/10 work."</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#10B981,#34D399);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">MJ</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Michael James</div><div style="font-size:0.7rem;color:var(--text-muted);">CTO, CloudDash</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★☆</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"Really solid work on our real estate platform. The map integration and property filtering work flawlessly. Only reason for 4 stars is the initial delivery was a few days late, but the final result made up for it."</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">FA</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Fatima Ali</div><div style="font-size:0.7rem;color:var(--text-muted);">Manager, EstatePro</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★★</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"Shayan understood our food delivery concept immediately and built exactly what we envisioned. The real-time order tracking feature is a game changer for our business. Our customers love it!"</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#EF4444,#F87171);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">HR</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Hassan Raza</div><div style="font-size:0.7rem;color:var(--text-muted);">Owner, QuickBite</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★★</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"Our old website was honestly embarrassing. Shayan completely redesigned and rebuilt it — now it looks like a Fortune 500 company site. SEO improved drastically too. Best investment we made this year."</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#F472B6);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">LN</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Lisa Nguyen</div><div style="font-size:0.7rem;color:var(--text-muted);">Director, NovaBrand</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★★</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"I've worked with 5-6 developers before and Shayan is genuinely different. He doesn't just code — he actually thinks about the user experience. My app's rating went from 3.2 to 4.8 after his redesign."</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#38BDF8);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">OT</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Omar Tariq</div><div style="font-size:0.7rem;color:var(--text-muted);">App Founder</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★★</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"Shayan delivered our school management system in just 3 weeks. It handles 2000+ students, attendance, grades, fee tracking — everything. And it hasn't crashed once. Absolute legend."</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">BM</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Bilal Mahmood</div><div style="font-size:0.7rem;color:var(--text-muted);">Admin, Greenfield Academy</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★☆</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"Great developer, very professional. Built our inventory management web app exactly to spec. Minor bugs were fixed same day. Would've given 5 stars but I'm tough grader haha. Seriously though, top-notch work."</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#14B8A6,#5EEAD4);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">ZS</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Zain Siddiqui</div><div style="font-size:0.7rem;color:var(--text-muted);">Operations Head, TradeMax</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★★</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"Shayan converted my Figma designs into a pixel-perfect Flutter app. I'm a designer myself so I'm very picky about implementation — and he nailed every single detail. Rare to find devs who care about design this much."</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F43F5E,#FB7185);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">AN</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Ayesha Noor</div><div style="font-size:0.7rem;color:var(--text-muted);">UI/UX Designer</div></div>
-                </div>
-            </div>
-
-            <div class="review-card">
-                <div class="review-stars">★★★★★</div>
-                <p style="font-size:0.85rem;color:var(--text-sec);line-height:1.7;margin-top:1rem;">"We hired Shayan for a emergency project — our previous dev left midway. He took over the messy codebase, cleaned it up, and delivered the finished product in 10 days. Absolute lifesaver. Can't thank him enough."</p>
-                <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#FF6B2C,#FBBF24);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;">WK</div>
-                    <div><div style="font-size:0.82rem;font-weight:600;">Waqas Khalid</div><div style="font-size:0.7rem;color:var(--text-muted);">Product Manager, TechFlow Inc</div></div>
-                </div>
-            </div>
-
-        </div>
-        <!-- Scroll hint for mobile -->
-        <div class="flex sm:hidden items-center justify-center gap-2 mt-3" style="color:var(--text-muted);font-size:0.7rem;">
-            <span class="iconify" data-icon="solar:arrow-left-linear" data-width="12"></span>
-            Swipe to see more
-            <span class="iconify" data-icon="solar:arrow-right-linear" data-width="12"></span>
-        </div>
-    </div>
-</section>
-
-<div class="section-divider" style="position:relative;z-index:1;"></div>
-
-<!-- Contact CTA -->
-<section id="contact" style="position:relative;z-index:1;padding:6rem 1.25rem;">
-    <div style="max-width:900px;margin:0 auto;text-align:center;">
-        <div class="reveal">
-            <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#FF6B2C;">Get in Touch</span>
-            <h2 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:700;letter-spacing:-0.03em;margin-top:0.75rem;line-height:1.1;">Have a Project<br>in Mind?</h2>
-            <p style="color:var(--text-sec);font-size:clamp(0.85rem,2vw,1rem);line-height:1.7;max-width:460px;margin:1.5rem auto 0;">Let's turn your vision into reality. Reach out and let's discuss how we can build something exceptional together.</p>
-        </div>
-        <div class="reveal reveal-d1" style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.75rem;margin-top:2.5rem;">
-            <button onclick="openModal()" class="btn-primary">
-                <span class="iconify" data-icon="solar:letter-bold" data-width="15"></span> Send a Message
-            </button>
-            <a href="https://wa.me/923296427396" target="_blank" class="btn-outline">
-                <span class="iconify" data-icon="mdi:whatsapp" data-width="16" style="color:#25D366;"></span> WhatsApp
-            </a>
-        </div>
-        <!-- Contact Cards -->
-        <div class="reveal reveal-d2" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-top:3rem;" class="grid grid-cols-1 sm:grid-cols-3">
-            <a href="mailto:chshayan314@gmail.com" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all 0.3s;display:block;" onmouseover="this.style.borderColor='var(--border-hover)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
-                <span class="iconify" data-icon="solar:letter-bold-duotone" data-width="24" style="color:#FF6B2C;"></span>
-                <div style="font-size:0.65rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:0.08em;margin-top:0.75rem;">Email</div>
-                <div style="font-size:0.78rem;color:var(--text);margin-top:0.25rem;word-break:break-all;">chshayan314@gmail.com</div>
-            </a>
-            <a href="https://wa.me/923296427396" target="_blank" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all 0.3s;display:block;" onmouseover="this.style.borderColor='var(--border-hover)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
-                <span class="iconify" data-icon="solar:phone-calling-bold-duotone" data-width="24" style="color:#10B981;"></span>
-                <div style="font-size:0.65rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:0.08em;margin-top:0.75rem;">WhatsApp</div>
-                <div style="font-size:0.78rem;color:var(--text);margin-top:0.25rem;">+92 329 6427396</div>
-            </a>
-            <a href="https://github.com/shayan314" target="_blank" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;color:inherit;transition:all 0.3s;display:block;" onmouseover="this.style.borderColor='var(--border-hover)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform='none'">
-                <span class="iconify" data-icon="solar:code-bold-duotone" data-width="24" style="color:#6366F1;"></span>
-                <div style="font-size:0.65rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:0.08em;margin-top:0.75rem;">GitHub</div>
-                <div style="font-size:0.78rem;color:var(--text);margin-top:0.25rem;">@shayan314</div>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
-<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem 1.25rem;">
-    <div style="max-width:1400px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;">
-        <div style="display:flex;align-items:center;gap:0.3rem;">
-            <span style="font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;color:var(--text);">SHAYAN</span>
-            <span class="gradient-text" style="font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;">.DEV</span>
-        </div>
-        <p style="font-size:0.7rem;color:var(--text-muted);">© 2025 Shayan Dev. All rights reserved.</p>
-        <div style="display:flex;gap:0.85rem;">
-            <a href="https://github.com/shayan314" target="_blank" style="color:var(--text-muted);transition:color 0.3s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'"><span class="iconify" data-icon="mdi:github" data-width="18"></span></a>
-            <a href="mailto:chshayan314@gmail.com" style="color:var(--text-muted);transition:color 0.3s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'"><span class="iconify" data-icon="solar:letter-linear" data-width="18"></span></a>
-            <a href="https://wa.me/923296427396" target="_blank" style="color:var(--text-muted);transition:color 0.3s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'"><span class="iconify" data-icon="mdi:whatsapp" data-width="18"></span></a>
-        </div>
-    </div>
+<footer style="position:relative;z-index:1;border-top:1px solid var(--br);padding:2rem 1.25rem">
+<div style="max-width:1400px;margin:0 auto" class="gf">
+<a href="#" class="logo"><span style="font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--t)">SHAYAN</span><span class="gt" style="font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700">.DEV</span></a>
+<p style="font-size:.7rem;color:var(--tm)">© 2026 Shayan Dev. All rights reserved.</p>
+<div style="display:flex;gap:.85rem">
+<a href="https://github.com/shayan314" target="_blank" style="color:var(--tm);transition:color .3s" onmouseover="this.style.color='var(--t)'" onmouseout="this.style.color='var(--tm)'"><span class="iconify" data-icon="mdi:github" data-width="18"></span></a>
+<a href="mailto:chshayan314@gmail.com" style="color:var(--tm);transition:color .3s" onmouseover="this.style.color='var(--t)'" onmouseout="this.style.color='var(--tm)'"><span class="iconify" data-icon="solar:letter-linear" data-width="18"></span></a>
+<a href="https://wa.me/923296427396" target="_blank" style="color:var(--tm);transition:color .3s" onmouseover="this.style.color='var(--t)'" onmouseout="this.style.color='var(--tm)'"><span class="iconify" data-icon="mdi:whatsapp" data-width="18"></span></a>
+</div>
+</div>
 </footer>
 
 <script>
-// Preloader
-window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('preloader').classList.add('hidden')},700)});
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('preloader').classList.add('hd')},700)});
+if(window.innerWidth>=1024)document.getElementById('fb').style.display='block';
+window.addEventListener('resize',function(){document.getElementById('fb').style.display=window.innerWidth>=1024?'block':'none'});
+if(window.innerWidth<640)document.getElementById('swpH').style.display='block';
+window.addEventListener('resize',function(){document.getElementById('swpH').style.display=window.innerWidth<640?'block':'none'});
 
-// Theme Toggle
-function toggleTheme(){
-    document.body.classList.toggle('light-mode');
-    const isLight=document.body.classList.contains('light-mode');
-    localStorage.setItem('theme',isLight?'light':'dark');
-}
-if(localStorage.getItem('theme')==='light')document.body.classList.add('light-mode');
+function tg(){document.body.classList.toggle('lm');localStorage.setItem('th',document.body.classList.contains('lm')?'l':'d')}
+if(localStorage.getItem('th')==='l')document.body.classList.add('lm');
 
-// Mobile Menu
-let mOpen=false;
-function toggleMobile(){
-    mOpen=!mOpen;
-    document.getElementById('mobileMenu').classList.toggle('open',mOpen);
-    const l1=document.getElementById('ml1'),l2=document.getElementById('ml2'),l3=document.getElementById('ml3');
-    if(mOpen){l1.style.transform='rotate(45deg) translate(4px,4px)';l2.style.opacity='0';l3.style.transform='rotate(-45deg) translate(4px,-4px)';document.body.style.overflow='hidden';}
-    else{l1.style.transform='none';l2.style.opacity='1';l3.style.transform='none';document.body.style.overflow='';}
-}
-function closeMobile(){if(mOpen)toggleMobile();}
+var mo=false;
+function tm(){mo=!mo;document.getElementById('mobM').classList.toggle('open',mo);var a=document.getElementById('l1'),b=document.getElementById('l2'),c=document.getElementById('l3');if(mo){a.style.transform='rotate(45deg) translate(4px,4px)';b.style.opacity='0';c.style.transform='rotate(-45deg) translate(4px,-4px)';document.body.style.overflow='hidden'}else{a.style.transform='none';b.style.opacity='1';c.style.transform='none';document.body.style.overflow=''}}
+function cm(){if(mo)tm()}
 
-// Modal
-function openModal(){document.getElementById('contactModal').classList.add('open');document.body.style.overflow='hidden';document.getElementById('contactForm').style.display='flex';document.getElementById('formSuccess').style.display='none';}
-function closeModal(){document.getElementById('contactModal').classList.remove('open');document.body.style.overflow='';}
-function handleSubmit(e){
-    e.preventDefault();
-    const btn=document.getElementById('submitBtn');
-    btn.innerHTML='<span class="iconify" data-icon="solar:refresh-bold" data-width="16" style="animation:spin 1s linear infinite;"></span> Sending...';
-    btn.disabled=true;
-    setTimeout(()=>{
-        document.getElementById('contactForm').style.display='none';
-        document.getElementById('formSuccess').style.display='block';
-        btn.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';
-        btn.disabled=false;
-        e.target.reset();
-    },1500);
-}
-// Spin keyframe for loading
-const spinStyle=document.createElement('style');
-spinStyle.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
-document.head.appendChild(spinStyle);
+function om(){document.getElementById('cMod').classList.add('open');document.body.style.overflow='hidden';document.getElementById('cF').style.display='flex';document.getElementById('fOk').style.display='none'}
+function xm(){document.getElementById('cMod').classList.remove('open');document.body.style.overflow=''}
+function hs(e){e.preventDefault();var b=document.getElementById('sB');b.innerHTML='<span class="iconify" data-icon="solar:refresh-bold" data-width="16" style="animation:spin 1s linear infinite"></span> Sending...';b.disabled=true;setTimeout(function(){document.getElementById('cF').style.display='none';document.getElementById('fOk').style.display='block';b.innerHTML='<span class="iconify" data-icon="solar:plain-bold" data-width="16"></span> Send Message';b.disabled=false;e.target.reset()},1500)}
 
-// Scroll Reveal
-const rObs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('active')})},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.reveal').forEach(el=>rObs.observe(el));
+var ro=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('on')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(function(el){ro.observe(el)});
 
-// Counter
-const cObs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){const el=en.target,t=parseInt(el.dataset.target),s=performance.now();(function u(n){const p=Math.min((n-s)/2000,1),e=1-Math.pow(1-p,3);el.textContent=Math.floor(e*t);if(p<1)requestAnimationFrame(u);else el.textContent=t;})(s);cObs.unobserve(el)}})},{threshold:0.5});
-document.querySelectorAll('.counter').forEach(c=>cObs.observe(c));
+var co=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var el=en.target,t=parseInt(el.dataset.target),s=performance.now();(function u(n){var p=Math.min((n-s)/2000,1),v=1-Math.pow(1-p,3);el.textContent=Math.floor(v*t);if(p<1)requestAnimationFrame(u);else el.textContent=t})(s);co.unobserve(el)}})},{threshold:.5});
+document.querySelectorAll('.ctr').forEach(function(c){co.observe(c)});
 
-// Active Nav
-const secs=document.querySelectorAll('section[id]'),nLinks=document.querySelectorAll('.nav-link');
-window.addEventListener('scroll',()=>{let cur='';secs.forEach(s=>{if(scrollY>=s.offsetTop-200)cur=s.id});nLinks.forEach(l=>{l.classList.remove('active');if(l.href.includes('#'+cur))l.classList.add('active')})});
+var secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nl');
+window.addEventListener('scroll',function(){var cur='';secs.forEach(function(s){if(scrollY>=s.offsetTop-200)cur=s.id});nls.forEach(function(l){l.classList.remove('on');if(l.href.indexOf('#'+cur)!==-1)l.classList.add('on')})});
 
-// Nav bg on scroll
-const nav=document.querySelector('nav');
-window.addEventListener('scroll',()=>{nav.style.background=scrollY>50?(document.body.classList.contains('light-mode')?'rgba(248,248,248,0.92)':'rgba(5,5,5,0.92)'):(document.body.classList.contains('light-mode')?'rgba(248,248,248,0.85)':'rgba(5,5,5,0.8)')});
-
-// Fix contact cards grid on mobile
-const contactGrid=document.querySelector('#contact .reveal-d2[style*="grid-template-columns"]');
-function fixContactGrid(){if(window.innerWidth<640){contactGrid.style.gridTemplateColumns='1fr'}else{contactGrid.style.gridTemplateColumns='repeat(3,1fr)'}}
-fixContactGrid();window.addEventListener('resize',fixContactGrid);
+var nav=document.querySelector('nav');
+window.addEventListener('scroll',function(){nav.style.background=scrollY>50?(document.body.classList.contains('lm')?'rgba(248,248,248,.92)':'rgba(5,5,5,.92)'):(document.body.classList.contains('lm')?'rgba(248,248,248,.88)':'rgba(5,5,5,.8)')});
 </script>
-
 </body>
 </html>
